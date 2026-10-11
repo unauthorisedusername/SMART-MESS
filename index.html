@@ -108,8 +108,16 @@ small.m{color:var(--m)}
   <div class="card">
     <h2>Add meal</h2>
     <div class="meals" id="meals"></div>
-    <label class="btn" for="meal-file" id="lbl-add">Add meal (choose photo)</label>
+    <button class="btn" id="btn-cam">Take photo of plate (camera)</button>
+    <div id="cam-box" class="hide">
+      <video id="plate-video" playsinline muted style="width:100%;max-height:60vh;object-fit:cover;border-radius:10px;background:#000"></video>
+      <button class="btn" id="btn-snap" style="margin-top:8px">Capture</button>
+      <button class="btn sec" id="btn-cam-cancel">Cancel camera</button>
+    </div>
+    <div id="cam-msg"></div>
+    <label class="btn sec" for="meal-file" id="lbl-add">Add meal (choose photo)</label>
     <input type="file" id="meal-file" accept="image/*">
+    <input type="file" id="meal-cam" accept="image/*" capture="environment">
     <div id="meal-area" class="hide">
       <img id="preview" alt="Meal">
       <div id="status"></div>
@@ -194,7 +202,7 @@ let keys=store.get('keys2',{g:'',q:''});
 const VIEWS=['home','scan','pick','student','qrs','set'];
 let qr=null;
 function go(v){
-  stopQR();
+  stopQR(); stopPlate();
   VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hide',x!==v));
   window.scrollTo(0,0);
 }
@@ -300,7 +308,7 @@ function autoMeal(){
   return h<10.5?'Breakfast':h<16?'Lunch':h<19?'Snacks':'Dinner';
 }
 function openStudent(s){
-  cur=s; selMeal=autoMeal(); resetMeal();
+  cur=s; selMeal=autoMeal(); resetMeal(); $('#cam-msg').innerHTML='';
   $('#who').innerHTML=`<b>${esc(s.name)}</b><div>Class ${esc(s.cls)}${s.sec?' - '+esc(s.sec):''}${s.house?' | '+esc(s.house)+' House':''}</div><div>ID ${esc(s.id)}</div>`;
   renderMeals(); renderProgress();
   go('student');
@@ -383,21 +391,52 @@ async function callGroq(key){
   return parseJSON(j.choices[0].message.content);
 }
 
-$('#meal-file').onchange=e=>{
+function gotImage(src,w,h){
+  const sc=(max,q)=>{ const k=Math.min(1,max/Math.max(w,h));
+    const c=document.createElement('canvas'); c.width=Math.round(w*k); c.height=Math.round(h*k);
+    c.getContext('2d').drawImage(src,0,0,c.width,c.height); return c.toDataURL('image/jpeg',q); };
+  const url=sc(1000,0.85); b64=url.split(',')[1]; curThumb=sc(120,0.5);
+  $('#preview').src=url;
+  $('#meal-area').classList.remove('hide');
+  analyze();
+}
+function fromFile(e){
   const f=e.target.files[0]; e.target.value=''; if(!f) return;
   const img=new Image();
-  img.onload=()=>{
-    const sc=(max,q)=>{ const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
-      const c=document.createElement('canvas'); c.width=Math.round(img.naturalWidth*k); c.height=Math.round(img.naturalHeight*k);
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',q); };
-    const url=sc(1000,0.85); b64=url.split(',')[1]; curThumb=sc(120,0.5);
-    URL.revokeObjectURL(img.src);
-    $('#preview').src=url;
-    $('#meal-area').classList.remove('hide');
-    analyze();
-  };
+  img.onload=()=>{ gotImage(img,img.naturalWidth,img.naturalHeight); URL.revokeObjectURL(img.src); };
   img.src=URL.createObjectURL(f);
+}
+$('#meal-file').onchange=fromFile;
+$('#meal-cam').onchange=fromFile;
+
+/* live plate camera */
+let plateStream=null;
+function stopPlate(){
+  if(plateStream){ plateStream.getTracks().forEach(t=>t.stop()); plateStream=null; }
+  const v=$('#plate-video'); if(v) v.srcObject=null;
+  const bx=$('#cam-box'); if(bx) bx.classList.add('hide');
+}
+$('#btn-cam').onclick=async()=>{
+  $('#cam-msg').innerHTML='';
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) throw new Error('not supported (page must be opened over HTTPS)');
+    stopPlate();
+    plateStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:960}},audio:false});
+    const v=$('#plate-video'); v.srcObject=plateStream; await v.play();
+    $('#cam-box').classList.remove('hide');
+  }catch(err){
+    stopPlate();
+    $('#cam-msg').innerHTML='<div class="msg info">Live camera unavailable ('+esc(err.message||err)+'). Opening the phone camera app instead.</div>';
+    $('#meal-cam').click();
+  }
 };
+$('#btn-snap').onclick=()=>{
+  const v=$('#plate-video');
+  if(!v.videoWidth){ $('#cam-msg').innerHTML='<div class="msg err">Camera not ready yet.</div>'; return; }
+  gotImage(v,v.videoWidth,v.videoHeight);
+  stopPlate();
+};
+$('#btn-cam-cancel').onclick=stopPlate;
 
 async function analyze(){
   curItems=[]; curTotals=null; $('#result').innerHTML=''; $('#btn-save').classList.add('hide');
