@@ -68,6 +68,14 @@ small.m{color:var(--m)}
     <button class="btn big" id="btn-next">Next student (scan QR)</button>
     <button class="btn sec" id="btn-list">Choose from class list</button>
   </div>
+  <div class="card">
+    <h2>Engines</h2>
+    <label class="l">Main engine: Gemini API key</label>
+    <input id="hk-g" type="password" placeholder="AIza..." autocomplete="off">
+    <label class="l">Backup engine: Groq API key (optional)</label>
+    <input id="hk-q" type="password" placeholder="gsk_..." autocomplete="off">
+    <small class="m">Saved automatically. If Gemini fails, it tries other Gemini models, then Groq.</small>
+  </div>
   <p style="text-align:center"><a href="#" id="lnk-qrs" style="color:var(--g);font-size:14px">Student QR codes (for testing / printing)</a></p>
 </section>
 
@@ -466,6 +474,15 @@ $('#btn-demo').onclick=()=>{
   $('#set-msg').innerHTML='<div class="msg good">Demo history loaded.</div>';
 };
 
+function syncKeys(){ $('#hk-g').value=keys.g; $('#hk-q').value=keys.q; $('#set-g').value=keys.g; $('#set-q').value=keys.q; }
+['hk-g','hk-q'].forEach(id=>$('#'+id).oninput=()=>{
+  keys={g:$('#hk-g').value.trim(),q:$('#hk-q').value.trim()}; store.set('keys2',keys);
+});
+const _save=$('#set-save').onclick;
+$('#set-save').onclick=()=>{ _save(); syncKeys(); };
+const _setBtn=$('#btn-set').onclick;
+$('#btn-set').onclick=()=>{ syncKeys(); _setBtn(); };
+syncKeys();
 go('home');
 </script>
 </body>
