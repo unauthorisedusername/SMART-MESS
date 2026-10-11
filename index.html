@@ -3,549 +3,470 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PoshanScan - Mess Attendance & Nutrition Tracker</title>
+<title>Mess Meal Tracker</title>
 <style>
-:root{--g:#1b7f4b;--gd:#145f38;--bg:#f3f6f4;--c:#fff;--t:#1d2a23;--m:#6b7a72;--b:#dbe3de;--r:#d64545;--a:#e0a100}
+:root{--g:#1b7f4b;--gd:#145f38;--bg:#f3f6f4;--t:#1d2a23;--m:#6b7a72;--b:#dbe3de;--r:#d64545;--a:#e0a100}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--t)}
 header{background:var(--g);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-header h1{margin:0;font-size:20px}
-header span{font-size:12px;opacity:.85}
-nav{display:flex;background:#fff;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:5}
-nav button{flex:1;padding:12px 4px;border:0;background:none;font-size:14px;font-weight:600;color:var(--m);border-bottom:3px solid transparent}
-nav button.on{color:var(--g);border-color:var(--g)}
-main{max-width:900px;margin:0 auto;padding:12px}
-.tab{display:none}.tab.on{display:block}
-.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:14px;margin-bottom:12px}
+header h1{margin:0;font-size:19px}
+header button{background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:14px}
+main{max-width:640px;margin:0 auto;padding:14px}
+.card{background:#fff;border:1px solid var(--b);border-radius:12px;padding:14px;margin-bottom:12px}
 .card h2{margin:0 0 10px;font-size:16px}
-.steps{display:flex;gap:6px;margin-bottom:12px}
-.steps div{flex:1;text-align:center;font-size:12px;padding:6px;border-radius:8px;background:#e5ebe7;color:var(--m)}
-.steps div.on{background:var(--g);color:#fff}
-.steps div.done{background:#bfe3cf;color:var(--gd)}
-button.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-size:15px;font-weight:600;cursor:pointer}
-button.btn.sec{background:#e5ebe7;color:var(--t)}
-button.btn.red{background:var(--r)}
-button.btn:disabled{opacity:.5}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-input,select,textarea{width:100%;padding:10px;border:1px solid var(--b);border-radius:8px;font-size:15px;background:#fff;color:var(--t)}
-label{font-size:13px;color:var(--m);display:block;margin:10px 0 4px}
-video,#qr-reader{width:100%;border-radius:10px;background:#000;overflow:hidden}
-video{max-height:60vh;object-fit:cover}
-.who{background:#e8f5ee;border-radius:10px;padding:10px 12px;margin-bottom:10px}
-.who b{font-size:17px}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:7px 5px;text-align:left;border-bottom:1px solid var(--b)}
-th{font-size:12px;color:var(--m)}
-td input{padding:6px;width:72px}
-.tw{overflow-x:auto}
-.tot td{font-weight:700;background:#f3f6f4}
-.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;color:#fff}
-.ok{background:var(--g)}.watch{background:var(--a)}.risk{background:var(--r)}.nd{background:#9aa7a0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
-.stat{background:#f3f6f4;border-radius:10px;padding:10px;text-align:center}
-.stat b{display:block;font-size:22px;color:var(--g)}
-.stat small{color:var(--m)}
-.msg{padding:10px;border-radius:8px;margin:8px 0;font-size:14px}
-.msg.err{background:#fdeaea;color:#8f1d1d}
-.msg.info{background:#e8f1fb;color:#1d4a7f}
-.msg.good{background:#e8f5ee;color:var(--gd)}
-.qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.qrc{border:1px solid var(--b);border-radius:10px;padding:8px;text-align:center;font-size:13px;background:#fff}
-.qrc img{width:120px;height:120px}
+.btn{display:block;width:100%;text-align:center;background:var(--g);color:#fff;border:0;border-radius:10px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.btn.sec{background:#e5ebe7;color:var(--t)}
+.btn.red{background:var(--r)}
+.btn.big{padding:22px;font-size:19px}
+.btn:disabled{opacity:.5}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--b);border-radius:10px;padding:13px;font-size:16px;margin-bottom:8px;cursor:pointer;color:var(--t)}
+.opt small{color:var(--m);float:right}
+.opt:active{background:#e8f5ee}
+input[type=file]{display:none}
+input[type=password],input[type=text]{width:100%;padding:10px;border:1px solid var(--b);border-radius:8px;font-size:15px}
+label.l{font-size:13px;color:var(--m);display:block;margin:10px 0 4px}
 .hide{display:none!important}
-.thumb{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:8px}
-.spin{display:inline-block;width:16px;height:16px;border:3px solid #cfe;border-top-color:var(--g);border-radius:50%;animation:s 1s linear infinite;vertical-align:middle;margin-right:6px}
-@keyframes s{to{transform:rotate(360deg)}}
-@media print{header,nav,.noprint{display:none!important}}
+.who{background:#e8f5ee;border-radius:10px;padding:12px;margin-bottom:12px}
+.who b{font-size:20px}
+.who div{color:var(--m);font-size:14px;margin-top:2px}
+.meals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.meals button{padding:12px 6px;border:2px solid var(--b);background:#fff;border-radius:10px;font-size:15px;font-weight:600;color:var(--t)}
+.meals button.on{border-color:var(--g);background:#e8f5ee;color:var(--gd)}
+.meals button.done::after{content:" \2713";color:var(--g)}
+.crumb{font-size:13px;color:var(--m);margin-bottom:10px}
+#qr-reader{width:100%;border-radius:10px;overflow:hidden;background:#000}
+#preview{width:100%;max-height:260px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:6px 4px;text-align:left;border-bottom:1px solid var(--b)}
+th{font-size:12px;color:var(--m)}
+.tot td{font-weight:700;background:#f3f6f4}
+.tw{overflow-x:auto}
+.msg{padding:10px;border-radius:8px;margin:8px 0;font-size:14px}
+.err{background:#fdeaea;color:#8f1d1d}
+.info{background:#e8f1fb;color:#1d4a7f}
+.good{background:#e8f5ee;color:var(--gd)}
+.pill{display:inline-block;padding:3px 11px;border-radius:99px;font-size:13px;font-weight:700;color:#fff}
+.ok{background:var(--g)}.watch{background:var(--a)}.risk{background:var(--r)}
+.bar{height:12px;background:#e5ebe7;border-radius:99px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--g)}
+.pg td,.pg th{text-align:center;padding:5px 2px}
+.pg td:first-child,.pg th:first-child{text-align:left}
+.yes{color:var(--g);font-weight:700}.no{color:#c0c8c3}
+.qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.qrc{border:1px solid var(--b);border-radius:10px;padding:8px;text-align:center;font-size:12px;background:#fff}
+small.m{color:var(--m)}
+@media print{header,.noprint{display:none!important}}
 </style>
 </head>
 <body>
-<header><h1>PoshanScan</h1><span>JNV Mess Demo</span></header>
-<nav>
-  <button class="on" data-tab="scan">Scan</button>
-  <button data-tab="dash">Dashboard</button>
-  <button data-tab="students">Students</button>
-  <button data-tab="settings">Settings</button>
-</nav>
+<header><h1>Mess Meal Tracker</h1><button id="btn-set" class="noprint">Settings</button></header>
 <main>
 
-<!-- SCAN TAB -->
-<section id="tab-scan" class="tab on">
-  <div class="steps"><div id="st1" class="on">1 Student</div><div id="st2">2 Plate</div><div id="st3">3 Result</div></div>
-  <div id="scan-msg"></div>
-
-  <div id="step1" class="card">
-    <h2>Scan student QR</h2>
-    <div id="qr-reader" class="hide"></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" id="btn-qr">Start QR scan</button>
-    </div>
-    <label>No QR? Select student manually</label>
-    <div class="row"><select id="manual-student" style="flex:1"></select><button class="btn sec" id="btn-manual">Select</button></div>
+<!-- HOME -->
+<section id="v-home">
+  <div class="card">
+    <button class="btn big" id="btn-next">Next student (scan QR)</button>
+    <button class="btn sec" id="btn-list">Choose from class list</button>
   </div>
+  <p style="text-align:center"><a href="#" id="lnk-qrs" style="color:var(--g);font-size:14px">Student QR codes (for testing / printing)</a></p>
+</section>
 
-  <div id="step2" class="card hide">
-    <div class="who" id="who2"></div>
-    <h2>Photo of plate</h2>
-    <video id="plate-video" playsinline muted></video>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" id="btn-snap">Capture plate</button>
-      <button class="btn sec" id="btn-back1">Change student</button>
-    </div>
-    <label>Or upload / take photo with phone app</label>
-    <input type="file" id="plate-file" accept="image/*" capture="environment">
-  </div>
-
-  <div id="step3" class="card hide">
-    <div class="who" id="who3"></div>
-    <img id="plate-img" class="thumb" alt="plate">
-    <div id="ai-status"></div>
-    <div class="row">
-      <div style="flex:1;min-width:140px"><label>Meal</label>
-        <select id="meal"><option>Breakfast</option><option>Lunch</option><option>Snacks</option><option>Dinner</option></select></div>
-    </div>
-    <div class="tw"><table id="items-table"></table></div>
-    <div class="row" style="margin-top:8px">
-      <button class="btn sec" id="btn-additem">+ Add item</button>
-      <button class="btn sec" id="btn-reanalyze">Re-analyze</button>
-    </div>
-    <div class="row" style="margin-top:12px">
-      <button class="btn" id="btn-save">Save attendance + intake</button>
-      <button class="btn sec" id="btn-next">Next student</button>
-    </div>
+<!-- SCAN -->
+<section id="v-scan" class="hide">
+  <div class="card">
+    <h2>Show the student's QR to the camera</h2>
+    <div id="qr-reader"></div>
+    <div id="scan-msg"></div>
+    <label class="btn sec" for="qr-file" style="margin-top:10px">Camera not working? Scan from a photo</label>
+    <input type="file" id="qr-file" accept="image/*">
+    <button class="btn sec" id="btn-scan-cancel">Cancel</button>
   </div>
 </section>
 
-<!-- DASHBOARD TAB -->
-<section id="tab-dash" class="tab">
+<!-- PICK -->
+<section id="v-pick" class="hide">
   <div class="card">
-    <div class="row">
-      <div style="flex:1;min-width:150px"><label style="margin-top:0">Date</label><input type="date" id="dash-date"></div>
-    </div>
-    <div class="grid" id="dash-summary" style="margin-top:10px"></div>
-  </div>
-  <div class="card">
-    <h2>Student intake</h2>
-    <div class="tw"><table id="dash-table"></table></div>
-    <p style="font-size:12px;color:var(--m)">Status uses the 7-day average against the daily target (Settings). Risk below 70%, Watch below 85%. Estimates only, not a medical diagnosis.</p>
-  </div>
-  <div class="card noprint">
-    <div class="row">
-      <button class="btn sec" id="btn-csv">Export CSV</button>
-      <button class="btn sec" id="btn-demo">Load sample data</button>
-      <button class="btn red" id="btn-clear">Clear all records</button>
-    </div>
-  </div>
-  <div class="card">
-    <h2>Recent records</h2>
-    <div class="tw"><table id="rec-table"></table></div>
+    <div class="crumb" id="pk-crumb"></div>
+    <div id="pk-body"></div>
+    <button class="btn sec" id="pk-back">Back</button>
   </div>
 </section>
 
-<!-- STUDENTS TAB -->
-<section id="tab-students" class="tab">
+<!-- STUDENT -->
+<section id="v-student" class="hide">
+  <button class="btn sec" id="btn-next2">&larr; Next student</button>
+  <div class="who" id="who"></div>
+
   <div class="card">
-    <h2>Add student</h2>
-    <div class="row">
-      <input id="s-id" placeholder="ID (e.g. S006)" style="flex:1;min-width:100px">
-      <input id="s-name" placeholder="Name" style="flex:2;min-width:140px">
-      <input id="s-class" placeholder="Class" style="flex:1;min-width:70px">
-      <button class="btn" id="btn-addstu">Add</button>
+    <h2>Add meal</h2>
+    <div class="meals" id="meals"></div>
+    <label class="btn" for="meal-file" id="lbl-add">Add meal (choose photo)</label>
+    <input type="file" id="meal-file" accept="image/*">
+    <div id="meal-area" class="hide">
+      <img id="preview" alt="Meal">
+      <div id="status"></div>
+      <div id="result"></div>
+      <button class="btn hide" id="btn-save">Save meal</button>
     </div>
   </div>
+
+  <div class="card" id="progress"></div>
+</section>
+
+<!-- QR LIST -->
+<section id="v-qrs" class="hide">
   <div class="card">
-    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Student QR codes</h2><button class="btn sec noprint" onclick="window.print()">Print</button></div>
-    <p style="font-size:13px;color:var(--m)">Show these on another screen or print them, then scan from the Scan tab.</p>
+    <div class="noprint">
+      <button class="btn sec" onclick="window.print()">Print</button>
+      <button class="btn sec" id="qrs-back">Back</button>
+    </div>
     <div class="qrs" id="qr-list"></div>
   </div>
 </section>
 
-<!-- SETTINGS TAB -->
-<section id="tab-settings" class="tab">
+<!-- SETTINGS -->
+<section id="v-set" class="hide">
   <div class="card">
-    <h2>AI settings</h2>
-    <label>Gemini API key (free from aistudio.google.com/apikey)</label>
-    <input id="set-key" type="password" placeholder="AIza..." autocomplete="off">
-    <label>Model</label>
-    <input id="set-model" placeholder="gemini-2.5-flash">
-    <label>Today's menu (helps the AI identify food)</label>
-    <textarea id="set-menu" rows="2"></textarea>
-    <label>Plate diameter (cm)</label>
-    <input id="set-plate" type="number" min="10" max="50">
-    <label>Daily target: calories (kcal)</label>
-    <input id="set-kcal" type="number">
-    <label>Daily target: protein (g)</label>
-    <input id="set-protein" type="number">
-    <div class="row" style="margin-top:12px"><button class="btn" id="btn-saveset">Save settings</button></div>
+    <h2>API keys</h2>
+    <label class="l">Gemini API key (aistudio.google.com/apikey)</label>
+    <input id="set-g" type="password" placeholder="AIza..." autocomplete="off">
+    <label class="l">Backup: Groq API key (console.groq.com/keys)</label>
+    <input id="set-q" type="password" placeholder="gsk_..." autocomplete="off">
+    <button class="btn" id="set-save" style="margin-top:12px">Save</button>
     <div id="set-msg"></div>
-    <p style="font-size:12px;color:var(--m)">The key is stored only in this browser. For a real deployment, move the AI call to a backend so the key stays private.</p>
+  </div>
+  <div class="card">
+    <h2>Data</h2>
+    <button class="btn sec" id="btn-demo">Load demo meal history</button>
+    <button class="btn red" id="btn-clear">Clear all meal records</button>
+    <button class="btn sec" id="set-back">Back</button>
   </div>
 </section>
+
 </main>
 
 <script>
 const $=s=>document.querySelector(s);
-const $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const r1=n=>Math.round((+n||0)*10)/10;
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-const r1=n=>Math.round(n*10)/10;
 const store={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){alert('Browser storage is full or blocked.');return false}}
 };
 
-/* ---------- Data ---------- */
-const DEFAULT_STUDENTS=[
-  {id:'S001',name:'Aarav Kumar',cls:'8'},
-  {id:'S002',name:'Priya Sharma',cls:'9'},
-  {id:'S003',name:'Rohit Yadav',cls:'7'},
-  {id:'S004',name:'Anjali Verma',cls:'10'},
-  {id:'S005',name:'Mohit Singh',cls:'8'}
+/* ---------- Prebuilt roster (edit freely) ---------- */
+// gender: M = boys, F = girls
+const ROSTER=[
+ {id:'S001',name:'Aarav Kumar',cls:'8',sec:'A',house:'Aravali',g:'M'},
+ {id:'S002',name:'Rohit Yadav',cls:'8',sec:'A',house:'Nilgiri',g:'M'},
+ {id:'S003',name:'Mohit Singh',cls:'8',sec:'B',house:'Aravali',g:'M'},
+ {id:'S004',name:'Karan Mehta',cls:'8',sec:'B',house:'Shivalik',g:'M'},
+ {id:'S005',name:'Priya Sharma',cls:'8',sec:'A',house:'Udaygiri',g:'F'},
+ {id:'S006',name:'Neha Patel',cls:'8',sec:'B',house:'Nilgiri',g:'F'},
+ {id:'S007',name:'Sneha Das',cls:'8',sec:'A',house:'Udaygiri',g:'F'},
+ {id:'S008',name:'Arjun Nayak',cls:'9',sec:'A',house:'Shivalik',g:'M'},
+ {id:'S009',name:'Vikram Sahu',cls:'9',sec:'A',house:'Aravali',g:'M'},
+ {id:'S010',name:'Suresh Behera',cls:'9',sec:'B',house:'Shivalik',g:'M'},
+ {id:'S011',name:'Anjali Verma',cls:'9',sec:'A',house:'Nilgiri',g:'F'},
+ {id:'S012',name:'Pooja Mishra',cls:'9',sec:'B',house:'Udaygiri',g:'F'},
+ {id:'S013',name:'Riya Panda',cls:'9',sec:'B',house:'Nilgiri',g:'F'},
+ {id:'S014',name:'Deepak Rout',cls:'10',sec:'A',house:'Udaygiri',g:'M'},
+ {id:'S015',name:'Amit Jena',cls:'10',sec:'A',house:'Aravali',g:'M'},
+ {id:'S016',name:'Sourav Mohanty',cls:'10',sec:'B',house:'Nilgiri',g:'M'},
+ {id:'S017',name:'Kavya Nair',cls:'10',sec:'A',house:'Shivalik',g:'F'},
+ {id:'S018',name:'Ananya Roy',cls:'10',sec:'B',house:'Aravali',g:'F'},
+ {id:'S019',name:'Ishita Gupta',cls:'10',sec:'B',house:'Udaygiri',g:'F'}
 ];
-let students=store.get('students',DEFAULT_STUDENTS);
-let records=store.get('records',[]);
-let settings=Object.assign({key:'',model:'gemini-2.5-flash',menu:'dal, rice, mixed veg sabzi, 2 roti',plate:'25',kcal:2400,protein:60},store.get('settings',{}));
+const MEALS=['Breakfast','Lunch','Snacks','Dinner'];
+let records=store.get('records2',[]);
+let keys=store.get('keys2',{g:'',q:''});
 
-/* approx per 100 g cooked: kcal, protein, carbs, fat (reference values, rounded) */
-const FOODS={
-  'rice':[130,2.7,28,0.3],'roti':[297,9,50,7],'chapati':[297,9,50,7],'paratha':[326,7,45,13],
-  'dal':[100,6,15,2],'sambar':[50,2.5,8,1.2],'rajma':[140,7,18,4],'chole':[150,7,20,5],
-  'sabzi':[90,2.5,9,5],'vegetable':[90,2.5,9,5],'paneer':[265,18,3.5,20],'egg':[155,13,1.1,11],
-  'curd':[60,3.5,4.7,3.3],'milk':[62,3.2,4.8,3.3],'khichdi':[120,4,20,2.5],'poha':[130,2.5,25,2.5],
-  'idli':[130,4,26,0.4],'upma':[150,3.5,23,5],'banana':[89,1.1,23,0.3],'salad':[20,1,4,0.2],
-  'kheer':[130,3.5,20,4],'halwa':[300,3,45,12],'puri':[350,7,45,16],'potato':[95,2,20,1],'aloo':[95,2,20,1]
-};
-function lookup(name){
-  const n=String(name||'').toLowerCase();
-  for(const k of Object.keys(FOODS)){ if(n.includes(k)) return FOODS[k]; }
-  return null;
+/* ---------- Navigation ---------- */
+const VIEWS=['home','scan','pick','student','qrs','set'];
+let qr=null;
+function go(v){
+  stopQR();
+  VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hide',x!==v));
+  window.scrollTo(0,0);
 }
-
-/* ---------- Lib loader ---------- */
 function loadScript(urls){
   return new Promise((res,rej)=>{
     let i=0;
     (function next(){
-      if(i>=urls.length) return rej(new Error('Could not load library'));
+      if(i>=urls.length) return rej(new Error('Could not load library (check internet)'));
       const s=document.createElement('script'); s.src=urls[i++];
       s.onload=res; s.onerror=next; document.head.appendChild(s);
     })();
   });
 }
-let qrLibP=null,qrGenP=null;
-const needScanner=()=>qrLibP||(qrLibP=window.Html5Qrcode?Promise.resolve():loadScript([
-  'https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js',
-  'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js']));
-const needQRGen=()=>qrGenP||(qrGenP=window.qrcode?Promise.resolve():loadScript([
-  'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js',
-  'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js']));
+let scanLib=null,genLib=null;
+const needScanner=()=>scanLib||(scanLib=window.Html5Qrcode?Promise.resolve():loadScript(['https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js','https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js']));
+const needGen=()=>genLib||(genLib=window.qrcode?Promise.resolve():loadScript(['https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js','https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js']));
 
-/* ---------- Tabs ---------- */
-$$('nav button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
-function showTab(t){
-  $$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
-  $$('.tab').forEach(s=>s.classList.toggle('on',s.id==='tab-'+t));
-  if(t!=='scan') stopCams();
-  if(t==='dash') renderDash();
-  if(t==='students') renderStudents();
-  if(t==='settings') loadSettings();
-}
+$('#btn-next').onclick=startScan;
+$('#btn-next2').onclick=()=>go('home');
+$('#btn-list').onclick=()=>{ pk={cls:null,g:null,house:null}; renderPick(); go('pick'); };
+$('#btn-scan-cancel').onclick=()=>go('home');
+$('#btn-set').onclick=()=>{ $('#set-g').value=keys.g; $('#set-q').value=keys.q; go('set'); };
+$('#set-back').onclick=()=>go('home');
+$('#lnk-qrs').onclick=e=>{ e.preventDefault(); renderQRs(); go('qrs'); };
+$('#qrs-back').onclick=()=>go('home');
 
-/* ---------- Scan flow ---------- */
-let current=null, curB64=null, curThumb=null, items=[];
-let qr=null, stream=null;
-
-function setStep(n){
-  [1,2,3].forEach(i=>{
-    $('#step'+i).classList.toggle('hide',i!==n);
-    const s=$('#st'+i); s.className=i===n?'on':(i<n?'done':'');
-  });
-}
+/* ---------- QR scan ---------- */
 function scanMsg(t,type='err'){ $('#scan-msg').innerHTML=t?`<div class="msg ${type}">${esc(t)}</div>`:''; }
-
 async function stopQR(){
   if(qr){ try{await qr.stop()}catch(e){} try{qr.clear()}catch(e){} qr=null; }
-  $('#qr-reader').classList.add('hide');
 }
-function stopPlate(){
-  if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-  $('#plate-video').srcObject=null;
-}
-function stopCams(){ stopQR(); stopPlate(); }
-
-$('#btn-qr').onclick=async()=>{
-  scanMsg('');
+async function startScan(){
+  go('scan'); scanMsg('');
   try{
     await needScanner();
-    await stopQR();
-    $('#qr-reader').classList.remove('hide');
     qr=new Html5Qrcode('qr-reader');
-    await qr.start({facingMode:'environment'},{fps:10,qrbox:{width:220,height:220}},onScan,()=>{});
+    await qr.start({facingMode:'environment'},{fps:10,qrbox:{width:230,height:230}},onScan,()=>{});
   }catch(e){
-    $('#qr-reader').classList.add('hide');
-    scanMsg('Camera/QR error: '+(e&&e.message?e.message:e)+' (camera needs HTTPS and permission)');
+    scanMsg('Camera error: '+(e&&e.message?e.message:e)+'. Camera needs HTTPS (a hosted page) and permission. You can scan from a photo or use the class list.');
   }
-};
-
+}
 function parseQR(text){
-  const p=String(text).split('|');
+  // Format: JNV|ID|Name|Class|Section|House   (ID alone also works)
+  const p=String(text).split('|').map(x=>x.trim());
   if(p[0]==='JNV'&&p.length>=3){
-    const id=p[1].trim();
-    const known=students.find(s=>s.id===id);
-    return known||{id,name:p[2].trim(),cls:(p[3]||'').trim()};
+    const known=ROSTER.find(s=>s.id===p[1]);
+    return known||{id:p[1],name:p[2],cls:p[3]||'',sec:p[4]||'',house:p[5]||'',g:''};
   }
-  const known=students.find(s=>s.id===String(text).trim());
-  return known||null;
+  return ROSTER.find(s=>s.id===String(text).trim())||null;
 }
 async function onScan(text){
   const s=parseQR(text);
-  if(!s){ scanMsg('Unknown QR code: '+text); return; }
+  if(!s){ scanMsg('Unknown QR: '+text); return; }
   await stopQR();
-  chooseStudent(s);
+  openStudent(s);
 }
-function fillManual(){
-  $('#manual-student').innerHTML=students.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} (${esc(s.id)})</option>`).join('');
-}
-$('#btn-manual').onclick=()=>{
-  const s=students.find(x=>x.id===$('#manual-student').value);
-  if(s){ stopQR(); chooseStudent(s); }
-};
-function whoHtml(){ return `<b>${esc(current.name)}</b><br><small>ID ${esc(current.id)}${current.cls?' | Class '+esc(current.cls):''}</small>`; }
-
-async function chooseStudent(s){
-  current=s; scanMsg('');
-  $('#who2').innerHTML=whoHtml(); $('#who3').innerHTML=whoHtml();
-  setStep(2);
+$('#qr-file').onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
   try{
-    stopPlate();
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:960}},audio:false});
-    const v=$('#plate-video'); v.srcObject=stream; await v.play();
-  }catch(e){
-    scanMsg('Plate camera not available ('+(e&&e.message?e.message:e)+'). Use the upload option below.');
-  }
-}
-$('#btn-back1').onclick=()=>{ stopPlate(); setStep(1); };
+    await needScanner(); await stopQR();
+    const sc=new Html5Qrcode('qr-reader');
+    const text=await sc.scanFile(f,false);
+    try{sc.clear()}catch(x){}
+    const s=parseQR(text);
+    if(!s) return scanMsg('Unknown QR: '+text);
+    openStudent(s);
+  }catch(err){ scanMsg('No QR found in that photo.'); }
+};
 
-function scaled(src,w,h,max,q){
-  const k=Math.min(1,max/Math.max(w,h));
-  const c=document.createElement('canvas'); c.width=Math.round(w*k); c.height=Math.round(h*k);
-  c.getContext('2d').drawImage(src,0,0,c.width,c.height);
-  return c.toDataURL('image/jpeg',q);
+/* ---------- Class -> Boys/Girls -> House -> Student ---------- */
+let pk={cls:null,g:null,house:null};
+function renderPick(){
+  const b=$('#pk-body'), c=[];
+  if(pk.cls) c.push('Class '+pk.cls);
+  if(pk.g) c.push(pk.g==='M'?'Boys':'Girls');
+  if(pk.house) c.push(pk.house);
+  $('#pk-crumb').textContent=c.length?c.join('  >  '):'Step 1: choose class';
+  let h='';
+  if(!pk.cls){
+    [...new Set(ROSTER.map(s=>s.cls))].sort((a,b)=>a-b).forEach(x=>h+=`<button class="opt" data-k="cls" data-v="${esc(x)}">Class ${esc(x)}</button>`);
+  }else if(!pk.g){
+    h+='<button class="opt" data-k="g" data-v="M">Boys</button><button class="opt" data-k="g" data-v="F">Girls</button>';
+  }else if(!pk.house){
+    [...new Set(ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g).map(s=>s.house))].sort().forEach(x=>h+=`<button class="opt" data-k="house" data-v="${esc(x)}">${esc(x)} House</button>`);
+    if(!h) h='<p>No students here.</p>';
+  }else{
+    ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g&&s.house===pk.house).sort((a,b)=>a.name.localeCompare(b.name))
+      .forEach(s=>h+=`<button class="opt" data-sid="${esc(s.id)}">${esc(s.name)}<small>Sec ${esc(s.sec)}</small></button>`);
+  }
+  b.innerHTML=h;
+  b.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{ pk[x.dataset.k]=x.dataset.v; renderPick(); });
+  b.querySelectorAll('[data-sid]').forEach(x=>x.onclick=()=>openStudent(ROSTER.find(s=>s.id===x.dataset.sid)));
 }
-$('#btn-snap').onclick=()=>{
-  const v=$('#plate-video');
-  if(!v.videoWidth){ scanMsg('Camera not ready yet.'); return; }
-  gotImage(v,v.videoWidth,v.videoHeight);
+$('#pk-back').onclick=()=>{
+  if(pk.house) pk.house=null; else if(pk.g) pk.g=null; else if(pk.cls) pk.cls=null; else return go('home');
+  renderPick();
 };
-$('#plate-file').onchange=e=>{
-  const f=e.target.files[0]; if(!f) return;
-  const img=new Image();
-  img.onload=()=>{ gotImage(img,img.naturalWidth,img.naturalHeight); URL.revokeObjectURL(img.src); };
-  img.src=URL.createObjectURL(f);
-  e.target.value='';
-};
-function gotImage(src,w,h){
-  curB64=scaled(src,w,h,900,0.8).split(',')[1];
-  curThumb=scaled(src,w,h,160,0.5);
-  $('#plate-img').src='data:image/jpeg;base64,'+curB64;
-  stopPlate();
-  $('#meal').value=autoMeal();
-  setStep(3);
-  runAnalysis();
-}
+
+/* ---------- Student screen ---------- */
+let cur=null, selMeal='Lunch', curItems=[], curTotals=null, curThumb=null, b64=null;
 function autoMeal(){
   const d=new Date(), h=d.getHours()+d.getMinutes()/60;
-  if(h<10.5) return 'Breakfast';
-  if(h<16) return 'Lunch';
-  if(h<19) return 'Snacks';
-  return 'Dinner';
+  return h<10.5?'Breakfast':h<16?'Lunch':h<19?'Snacks':'Dinner';
+}
+function openStudent(s){
+  cur=s; selMeal=autoMeal(); resetMeal();
+  $('#who').innerHTML=`<b>${esc(s.name)}</b><div>Class ${esc(s.cls)}${s.sec?' - '+esc(s.sec):''}${s.house?' | '+esc(s.house)+' House':''}</div><div>ID ${esc(s.id)}</div>`;
+  renderMeals(); renderProgress();
+  go('student');
+}
+function doneToday(m){ const d=ymd(new Date()); return records.some(r=>r.sid===cur.id&&r.date===d&&r.meal===m); }
+function renderMeals(){
+  const box=$('#meals');
+  box.innerHTML=MEALS.map(m=>`<button data-m="${m}" class="${m===selMeal?'on':''} ${doneToday(m)?'done':''}">${m}</button>`).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{ selMeal=b.dataset.m; renderMeals(); });
+}
+function resetMeal(){
+  b64=null; curItems=[]; curTotals=null;
+  $('#meal-area').classList.add('hide'); $('#status').innerHTML=''; $('#result').innerHTML='';
+  $('#btn-save').classList.add('hide'); $('#btn-save').disabled=false;
 }
 
-/* ---------- AI ---------- */
-async function analyze(b64){
-  if(!settings.key) throw new Error('Add your Gemini API key in Settings, or use "+ Add item" to enter manually.');
-  const prompt=`You are a nutrition assistant for an Indian school hostel mess. The photo shows a steel thali/plate of food. Plate diameter is about ${settings.plate} cm. Today's menu: ${settings.menu}. Identify every food item visible and estimate the cooked weight of each in grams. Use menu names when they match. Return ONLY JSON in this exact shape: {"items":[{"name":"string","grams":number,"kcal_per_100g":number,"protein_per_100g":number,"carbs_per_100g":number,"fat_per_100g":number}],"confidence":"low|medium|high","note":"short string"}. If no food is visible, return an empty items array.`;
-  const url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(settings.model)+':generateContent?key='+encodeURIComponent(settings.key);
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-    contents:[{parts:[{text:prompt},{inline_data:{mime_type:'image/jpeg',data:b64}}]}],
-    generationConfig:{responseMimeType:'application/json',temperature:0.2}
-  })});
+/* ---------- Progress ---------- */
+function renderProgress(){
+  const days=[];
+  for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(d); }
+  const mine=records.filter(r=>r.sid===cur.id);
+  const has=(d,m)=>mine.some(r=>r.date===ymd(d)&&r.meal===m);
+  let taken=0;
+  days.forEach(d=>MEALS.forEach(m=>{ if(has(d,m)) taken++; }));
+  const expected=6*4+MEALS.indexOf(autoMeal());   // today: only meals already passed
+  const pct=expected?Math.min(100,Math.round(taken/expected*100)):0;
+  const cls=pct>=80?'ok':pct>=50?'watch':'risk';
+  const lab=pct>=80?'Regular':pct>=50?'Irregular':'Rarely eating';
+  const wk=mine.filter(r=>days.some(d=>ymd(d)===r.date));
+  const nd=new Set(wk.map(r=>r.date)).size;
+  const avgK=nd?Math.round(wk.reduce((a,r)=>a+r.kcal,0)/nd):0;
+  const missed=Math.max(0,expected-taken);
+  const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let h=`<h2>Progress (last 7 days)</h2>
+    <div><span class="pill ${cls}">${lab}</span> <b style="margin-left:6px">${pct}%</b> of meals taken</div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <small class="m">${taken} meals taken${missed?', '+missed+' missed':''}${nd?' | avg '+avgK+' kcal/day':''}</small>
+    <div class="tw" style="margin-top:10px"><table class="pg"><tr><th></th>${days.map(d=>`<th>${dn[d.getDay()]}</th>`).join('')}</tr>`;
+  MEALS.forEach(m=>{ h+=`<tr><td>${m}</td>${days.map(d=>`<td class="${has(d,m)?'yes':'no'}">${has(d,m)?'&#10003;':'-'}</td>`).join('')}</tr>`; });
+  h+='</table></div>';
+  $('#progress').innerHTML=h;
+}
+
+/* ---------- Meal photo + AI ---------- */
+const GEMINI_MODELS=['gemini-3.8-flash','gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash-lite'];
+const GROQ_MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
+const PROMPT='You are a nutrition assistant. The photo shows an Indian meal/thali. Identify every food item and estimate cooked weight in grams and nutrition for that portion. Return ONLY JSON: {"items":[{"name":"string","grams":number,"kcal":number,"protein_g":number,"carbs_g":number,"fat_g":number}],"confidence":"low|medium|high","note":"short string"}. If no food is visible, return empty items.';
+
+function parseJSON(t){
+  t=String(t).replace(/```json|```/g,'');
+  const a=t.indexOf('{'), b=t.lastIndexOf('}');
+  if(a<0||b<0) throw new Error('No JSON in reply');
+  return JSON.parse(t.slice(a,b+1));
+}
+async function timed(url,opts,ms){
+  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),ms);
+  try{ return await fetch(url,Object.assign({signal:ctl.signal},opts)); }
+  catch(e){ throw new Error(e.name==='AbortError'?'timed out':e.message); }
+  finally{ clearTimeout(t); }
+}
+async function callGemini(key,model){
+  const r=await timed('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+encodeURIComponent(key),{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:PROMPT},{inline_data:{mime_type:'image/jpeg',data:b64}}]}],generationConfig:{responseMimeType:'application/json',temperature:0.2}})
+  },25000);
   const j=await r.json();
   if(!r.ok) throw new Error((j.error&&j.error.message)||('HTTP '+r.status));
   const t=((j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[]).map(p=>p.text||'').join('');
-  if(!t) throw new Error('Empty AI response');
-  return JSON.parse(t.replace(/```json|```/g,'').trim());
+  if(!t) throw new Error('empty reply');
+  return parseJSON(t);
 }
-async function runAnalysis(){
-  items=[]; renderItems();
-  $('#ai-status').innerHTML='<div class="msg info"><span class="spin"></span>Analyzing plate...</div>';
-  $('#btn-save').disabled=true;
-  try{
-    const d=await analyze(curB64);
-    items=(d.items||[]).map(it=>{
-      const ref=lookup(it.name);
-      const v=ref||[it.kcal_per_100g||0,it.protein_per_100g||0,it.carbs_per_100g||0,it.fat_per_100g||0];
-      return {name:String(it.name||'item'),g:Math.max(0,Math.round(+it.grams||0)),v};
-    });
-    $('#ai-status').innerHTML=`<div class="msg good">Estimate ready (confidence: ${esc(d.confidence||'n/a')}). ${esc(d.note||'')} Edit grams if needed.</div>`;
-  }catch(e){
-    $('#ai-status').innerHTML=`<div class="msg err">${esc(e.message||e)}</div>`;
-  }
-  $('#btn-save').disabled=false;
-  renderItems();
+async function callGroq(key){
+  const r=await timed('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({model:GROQ_MODEL,temperature:0.2,response_format:{type:'json_object'},
+      messages:[{role:'user',content:[{type:'text',text:PROMPT},{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+b64}}]}]})
+  },25000);
+  const j=await r.json();
+  if(!r.ok) throw new Error((j.error&&j.error.message)||('HTTP '+r.status));
+  return parseJSON(j.choices[0].message.content);
 }
-$('#btn-reanalyze').onclick=()=>{ if(curB64) runAnalysis(); };
 
-/* ---------- Items table ---------- */
-function calc(it){ const f=it.g/100; return {kcal:it.v[0]*f,protein:it.v[1]*f,carbs:it.v[2]*f,fat:it.v[3]*f}; }
-function totals(){
-  const t={kcal:0,protein:0,carbs:0,fat:0};
-  items.forEach(it=>{const c=calc(it); t.kcal+=c.kcal;t.protein+=c.protein;t.carbs+=c.carbs;t.fat+=c.fat;});
-  return t;
-}
-function renderItems(){
-  const tb=$('#items-table');
-  let h='<tr><th>Item</th><th>Grams</th><th>kcal</th><th>Prot</th><th>Carb</th><th>Fat</th><th></th></tr>';
-  items.forEach((it,i)=>{
-    const c=calc(it);
-    h+=`<tr><td>${esc(it.name)}</td><td><input type="number" min="0" value="${it.g}" data-i="${i}" class="gi"></td><td>${Math.round(c.kcal)}</td><td>${r1(c.protein)}</td><td>${r1(c.carbs)}</td><td>${r1(c.fat)}</td><td><button class="btn sec" data-d="${i}" style="padding:4px 9px">x</button></td></tr>`;
-  });
-  const t=totals();
-  h+=`<tr class="tot"><td>Total</td><td></td><td>${Math.round(t.kcal)}</td><td>${r1(t.protein)}</td><td>${r1(t.carbs)}</td><td>${r1(t.fat)}</td><td></td></tr>`;
-  tb.innerHTML=h;
-  tb.querySelectorAll('.gi').forEach(inp=>inp.onchange=()=>{ items[+inp.dataset.i].g=Math.max(0,+inp.value||0); renderItems(); });
-  tb.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{ items.splice(+b.dataset.d,1); renderItems(); });
-}
-$('#btn-additem').onclick=()=>{
-  const n=prompt('Food name (e.g. rice, roti, dal, sabzi, paneer, egg, curd, banana):');
-  if(!n) return;
-  const ref=lookup(n);
-  let v=ref;
-  if(!ref){
-    const s=prompt('Unknown food. Enter kcal,protein,carbs,fat per 100 g (e.g. 120,4,20,2):','120,4,20,2');
-    if(!s) return;
-    v=s.split(',').map(x=>+x.trim()||0); while(v.length<4) v.push(0);
-  }
-  items.push({name:n,g:100,v}); renderItems();
+$('#meal-file').onchange=e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  const img=new Image();
+  img.onload=()=>{
+    const sc=(max,q)=>{ const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+      const c=document.createElement('canvas'); c.width=Math.round(img.naturalWidth*k); c.height=Math.round(img.naturalHeight*k);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/jpeg',q); };
+    const url=sc(1000,0.85); b64=url.split(',')[1]; curThumb=sc(120,0.5);
+    URL.revokeObjectURL(img.src);
+    $('#preview').src=url;
+    $('#meal-area').classList.remove('hide');
+    analyze();
+  };
+  img.src=URL.createObjectURL(f);
 };
+
+async function analyze(){
+  curItems=[]; curTotals=null; $('#result').innerHTML=''; $('#btn-save').classList.add('hide');
+  if(!keys.g&&!keys.q){ $('#status').innerHTML='<div class="msg err">Add a Gemini or Groq API key in Settings.</div>'; return; }
+  const steps=[];
+  if(keys.g) GEMINI_MODELS.forEach(m=>steps.push({name:m,run:()=>callGemini(keys.g,m)}));
+  if(keys.q) steps.push({name:'Groq',run:()=>callGroq(keys.q)});
+  const errs=[]; let data=null, used='';
+  for(const st of steps){
+    $('#status').innerHTML='<div class="msg info">Analyzing with '+esc(st.name)+'...'+(errs.length?' (previous failed, trying next)':'')+'</div>';
+    try{ data=await st.run(); used=st.name; break; }catch(e){ errs.push(st.name+': '+(e.message||e)); }
+  }
+  if(!data){ $('#status').innerHTML='<div class="msg err">All providers failed:<br>'+errs.map(esc).join('<br>')+'</div>'; return; }
+  curItems=(data.items||[]).map(i=>({name:String(i.name||'item'),g:Math.round(+i.grams||0),kcal:+i.kcal||0,p:+i.protein_g||0,c:+i.carbs_g||0,f:+i.fat_g||0}));
+  const T={g:0,kcal:0,p:0,c:0,f:0};
+  let h='<div class="tw"><table><tr><th>Item</th><th>g</th><th>kcal</th><th>Prot</th><th>Carb</th><th>Fat</th></tr>';
+  curItems.forEach(i=>{ T.g+=i.g;T.kcal+=i.kcal;T.p+=i.p;T.c+=i.c;T.f+=i.f;
+    h+=`<tr><td>${esc(i.name)}</td><td>${i.g}</td><td>${Math.round(i.kcal)}</td><td>${r1(i.p)}</td><td>${r1(i.c)}</td><td>${r1(i.f)}</td></tr>`; });
+  h+=`<tr class="tot"><td>Total</td><td>${T.g}</td><td>${Math.round(T.kcal)}</td><td>${r1(T.p)}</td><td>${r1(T.c)}</td><td>${r1(T.f)}</td></tr></table></div>`;
+  if(!curItems.length) h='<div class="msg info">No food detected.</div>';
+  h+=`<small class="m">Confidence: ${esc(data.confidence||'n/a')}. ${esc(data.note||'')} Estimates only. Answered by ${esc(used)}.</small>`;
+  curTotals=T;
+  $('#status').innerHTML=''; $('#result').innerHTML=h;
+  $('#btn-save').classList.remove('hide'); $('#btn-save').textContent='Save '+selMeal;
+}
+
 $('#btn-save').onclick=()=>{
-  if(!current) return;
-  if(!items.length){ if(!confirm('No food items. Save as attendance only?')) return; }
-  const t=totals(), date=ymd(new Date()), meal=$('#meal').value;
-  records=records.filter(r=>!(r.sid===current.id&&r.date===date&&r.meal===meal));
-  records.push({sid:current.id,name:current.name,cls:current.cls,date,meal,time:new Date().toTimeString().slice(0,5),
-    kcal:Math.round(t.kcal),protein:r1(t.protein),carbs:r1(t.carbs),fat:r1(t.fat),
-    items:items.map(i=>({name:i.name,g:i.g})),thumb:curThumb});
-  if(store.set('records',records)){
-    $('#ai-status').innerHTML=`<div class="msg good">Saved: ${esc(current.name)} - ${esc(meal)} - ${Math.round(t.kcal)} kcal, ${r1(t.protein)} g protein.</div>`;
+  if(!cur||!curTotals) return;
+  const date=ymd(new Date());
+  records=records.filter(r=>!(r.sid===cur.id&&r.date===date&&r.meal===selMeal));
+  records.push({sid:cur.id,name:cur.name,date,meal:selMeal,time:new Date().toTimeString().slice(0,5),
+    kcal:Math.round(curTotals.kcal),protein:r1(curTotals.p),carbs:r1(curTotals.c),fat:r1(curTotals.f),
+    items:curItems.map(i=>({name:i.name,g:i.g})),thumb:curThumb});
+  if(store.set('records2',records)){
+    $('#btn-save').disabled=true;
+    $('#status').innerHTML=`<div class="msg good">${esc(selMeal)} saved for ${esc(cur.name)}.</div>`;
+    renderMeals(); renderProgress();
   }
 };
-$('#btn-next').onclick=()=>{ current=null; curB64=null; items=[]; scanMsg(''); setStep(1); };
 
-/* ---------- Dashboard ---------- */
-const MEALS=['Breakfast','Lunch','Snacks','Dinner'];
-const sum=(a,k)=>a.reduce((x,r)=>x+(+r[k]||0),0);
-function renderDash(){
-  const inp=$('#dash-date'); if(!inp.value) inp.value=ymd(new Date());
-  const d=inp.value;
-  const days=[];
-  for(let i=0;i<7;i++){ const x=new Date(d+'T00:00:00'); x.setDate(x.getDate()-i); days.push(ymd(x)); }
-  const dayRecs=records.filter(r=>r.date===d);
-
-  let sh=`<div class="stat"><b>${new Set(dayRecs.map(r=>r.sid)).size}/${students.length}</b><small>Students present</small></div>`;
-  MEALS.forEach(m=>{ sh+=`<div class="stat"><b>${new Set(dayRecs.filter(r=>r.meal===m).map(r=>r.sid)).size}</b><small>${m}</small></div>`; });
-  $('#dash-summary').innerHTML=sh;
-
-  let h='<tr><th>Student</th><th>B</th><th>L</th><th>S</th><th>D</th><th>Day kcal</th><th>Day prot</th><th>7d avg kcal</th><th>7d avg prot</th><th>Status</th></tr>';
-  students.forEach(s=>{
-    const td=dayRecs.filter(r=>r.sid===s.id);
-    const wk=records.filter(r=>r.sid===s.id&&days.includes(r.date));
-    const ad=new Set(wk.map(r=>r.date)).size;
-    const ak=ad?sum(wk,'kcal')/ad:0, ap=ad?sum(wk,'protein')/ad:0;
-    let st='nd',lab='No data';
-    if(ad){
-      const ratio=Math.min(ak/settings.kcal,ap/settings.protein);
-      if(ratio<0.7){st='risk';lab='Risk';} else if(ratio<0.85){st='watch';lab='Watch';} else {st='ok';lab='OK';}
-    }
-    const marks=MEALS.map(m=>`<td>${td.some(r=>r.meal===m)?'&#10003;':'-'}</td>`).join('');
-    h+=`<tr><td>${esc(s.name)}<br><small style="color:var(--m)">${esc(s.id)}</small></td>${marks}<td>${Math.round(sum(td,'kcal'))}</td><td>${r1(sum(td,'protein'))}</td><td>${Math.round(ak)}</td><td>${r1(ap)}</td><td><span class="pill ${st}">${lab}</span></td></tr>`;
-  });
-  $('#dash-table').innerHTML=h;
-
-  const recent=[...records].sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).slice(0,15);
-  let rh='<tr><th>Photo</th><th>Student</th><th>Date</th><th>Meal</th><th>kcal</th><th>Prot</th></tr>';
-  recent.forEach(r=>{ rh+=`<tr><td>${r.thumb?`<img src="${r.thumb}" width="44" style="border-radius:6px">`:''}</td><td>${esc(r.name)}</td><td>${esc(r.date)} ${esc(r.time||'')}</td><td>${esc(r.meal)}</td><td>${r.kcal}</td><td>${r.protein}</td></tr>`; });
-  $('#rec-table').innerHTML=recent.length?rh:'<tr><td>No records yet.</td></tr>';
-}
-$('#dash-date').onchange=renderDash;
-
-$('#btn-csv').onclick=()=>{
-  const rows=[['student_id','name','class','date','time','meal','kcal','protein_g','carbs_g','fat_g','items']];
-  records.forEach(r=>rows.push([r.sid,r.name,r.cls,r.date,r.time,r.meal,r.kcal,r.protein,r.carbs,r.fat,(r.items||[]).map(i=>i.name+' '+i.g+'g').join('; ')]));
-  const csv=rows.map(r=>r.map(c=>'"'+String(c??'').replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download='mess_intake_'+ymd(new Date())+'.csv'; a.click();
-};
-$('#btn-clear').onclick=()=>{
-  if(confirm('Delete all saved records?')){ records=[]; store.set('records',records); renderDash(); }
-};
-$('#btn-demo').onclick=()=>{
-  const rnd=(a,b)=>a+Math.random()*(b-a);
-  const base={Breakfast:[380,320,0.18],Lunch:[800,520,0.4],Snacks:[250,180,0.1],Dinner:[760,500,0.32]};
-  for(let i=0;i<7;i++){
-    const dt=new Date(); dt.setDate(dt.getDate()-i); const date=ymd(dt);
-    students.forEach((s,idx)=>{
-      const low=(idx===2)?0.6:1; // one student with low intake for the demo
-      MEALS.forEach(m=>{
-        if(Math.random()<0.08) return;
-        const k=rnd(0.85,1.1)*base[m][0]*low;
-        const p=k*0.027*rnd(0.9,1.1);
-        records=records.filter(r=>!(r.sid===s.id&&r.date===date&&r.meal===m));
-        records.push({sid:s.id,name:s.name,cls:s.cls,date,meal:m,time:'12:00',kcal:Math.round(k),protein:r1(p),carbs:r1(k*0.13),fat:r1(k*0.03),items:[],thumb:''});
-      });
-    });
-  }
-  store.set('records',records); renderDash();
-};
-
-/* ---------- Students ---------- */
-async function renderStudents(){
+/* ---------- QR codes list ---------- */
+async function renderQRs(){
   const box=$('#qr-list');
-  try{ await needQRGen(); }catch(e){ box.innerHTML='<div class="msg err">QR library failed to load (check internet).</div>'; return; }
-  box.innerHTML=students.map((s,i)=>{
-    const q=qrcode(0,'M'); q.addData(`JNV|${s.id}|${s.name}|${s.cls}`); q.make();
-    return `<div class="qrc">${q.createImgTag(5,6)}<br><b>${esc(s.name)}</b><br>${esc(s.id)} | Class ${esc(s.cls)}<br><button class="btn sec noprint" data-del="${i}" style="padding:3px 10px;margin-top:4px">Remove</button></div>`;
+  try{ await needGen(); }catch(e){ box.innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; return; }
+  box.innerHTML=ROSTER.map(s=>{
+    const q=qrcode(0,'M'); q.addData(`JNV|${s.id}|${s.name}|${s.cls}|${s.sec}|${s.house}`); q.make();
+    return `<div class="qrc">${q.createImgTag(4,4)}<br><b>${esc(s.name)}</b><br>Class ${esc(s.cls)}-${esc(s.sec)} | ${esc(s.house)}</div>`;
   }).join('');
-  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
-    const s=students[+b.dataset.del];
-    if(confirm('Remove '+s.name+'?')){ students.splice(+b.dataset.del,1); store.set('students',students); fillManual(); renderStudents(); }
-  });
 }
-$('#btn-addstu').onclick=()=>{
-  const id=$('#s-id').value.trim(), name=$('#s-name').value.trim(), cls=$('#s-class').value.trim();
-  if(!id||!name){ alert('ID and name are required.'); return; }
-  if(students.some(s=>s.id===id)){ alert('ID already exists.'); return; }
-  students.push({id,name,cls}); store.set('students',students);
-  $('#s-id').value=$('#s-name').value=$('#s-class').value='';
-  fillManual(); renderStudents();
-};
 
 /* ---------- Settings ---------- */
-function loadSettings(){
-  $('#set-key').value=settings.key; $('#set-model').value=settings.model; $('#set-menu').value=settings.menu;
-  $('#set-plate').value=settings.plate; $('#set-kcal').value=settings.kcal; $('#set-protein').value=settings.protein;
-}
-$('#btn-saveset').onclick=()=>{
-  settings={key:$('#set-key').value.trim(),model:$('#set-model').value.trim()||'gemini-2.5-flash',menu:$('#set-menu').value.trim(),
-    plate:$('#set-plate').value||'25',kcal:+$('#set-kcal').value||2400,protein:+$('#set-protein').value||60};
-  store.set('settings',settings);
+$('#set-save').onclick=()=>{
+  keys={g:$('#set-g').value.trim(),q:$('#set-q').value.trim()};
+  store.set('keys2',keys);
   $('#set-msg').innerHTML='<div class="msg good">Saved.</div>';
   setTimeout(()=>$('#set-msg').innerHTML='',2000);
 };
+$('#btn-clear').onclick=()=>{ if(confirm('Delete all meal records?')){ records=[]; store.set('records2',records); } };
+$('#btn-demo').onclick=()=>{
+  const rnd=Math.random;
+  ROSTER.forEach((s,idx)=>{
+    const rate=[0.95,0.8,0.55,0.3][idx%4];
+    for(let i=1;i<=6;i++){
+      const d=new Date(); d.setDate(d.getDate()-i); const date=ymd(d);
+      MEALS.forEach(m=>{
+        if(rnd()>rate) return;
+        const base={Breakfast:380,Lunch:800,Snacks:250,Dinner:760}[m]*(0.85+rnd()*0.25);
+        records=records.filter(r=>!(r.sid===s.id&&r.date===date&&r.meal===m));
+        records.push({sid:s.id,name:s.name,date,meal:m,time:'12:00',kcal:Math.round(base),protein:r1(base*0.027),carbs:r1(base*0.13),fat:r1(base*0.03),items:[],thumb:''});
+      });
+    }
+  });
+  store.set('records2',records);
+  $('#set-msg').innerHTML='<div class="msg good">Demo history loaded.</div>';
+};
 
-/* ---------- Init ---------- */
-fillManual(); loadSettings(); setStep(1);
+go('home');
 </script>
 </body>
 </html>
