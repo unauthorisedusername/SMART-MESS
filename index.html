@@ -4,7 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#d6f4e6">
+<meta name="theme-color" content="#10a06a">
+<meta name="description" content="Track student mess meals with QR scan and AI plate analysis.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mess Tracker">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Mess Meal Tracker</title>
 <style>
 :root{
@@ -88,6 +96,7 @@ header{
 .logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;flex:none;
   background:linear-gradient(135deg,#25c78d,#0b7a52);box-shadow:0 6px 16px rgba(16,160,106,.4),inset 0 1px 0 rgba(255,255,255,.4)}
 header h1{margin:0;font-size:19px;font-weight:750;letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbtns{display:flex;gap:8px;flex:none}
 header button{
   display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;
   background:var(--glass2);color:var(--t);border:1px solid var(--edge);border-radius:15px;
@@ -95,6 +104,7 @@ header button{
   box-shadow:inset 0 1px 0 var(--hi)
 }
 header button:active{transform:scale(.97)}
+#btn-install{background:linear-gradient(135deg,#1bbd82,#0b7a52);color:#fff;border-color:transparent}
 
 main{width:calc(100% - 24px);max-width:1670px;margin:0 auto;padding:16px 0 56px}
 section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
@@ -143,24 +153,30 @@ section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
 .chip b{display:block;font-size:28px;letter-spacing:-.03em;line-height:1.1}
 .chip span{font-size:12px;color:var(--m);font-weight:600}
 .card.quote{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(27,189,130,.22),rgba(255,255,255,.3) 55%,rgba(251,191,36,.18))}
+.card.quote.alt{background:linear-gradient(145deg,rgba(238,91,91,.18),rgba(255,255,255,.3) 55%,rgba(251,191,36,.2))}
+.card.quote.alt .eyebrow{color:var(--r)}
+.card.quote.alt::before{color:var(--r)}
 .card.quote::before{content:"\201C";position:absolute;right:18px;top:-18px;font-size:150px;font-family:Georgia,serif;line-height:1;color:var(--g);opacity:.18;pointer-events:none}
 .card.quote blockquote{margin:10px 0 12px;font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1.4;font-style:italic;letter-spacing:-.01em}
 .card.quote p{margin:0 0 16px;color:var(--m);font-size:15px;line-height:1.55}
 .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .fact{background:var(--glass2);border:1px solid var(--edge);border-radius:18px;padding:12px 14px;box-shadow:inset 0 1px 0 var(--hi)}
 .fact b{display:block;font-size:22px;letter-spacing:-.03em;color:var(--gd)}
+.card.quote.alt .fact b{color:var(--r)}
 .fact span{font-size:12px;line-height:1.35;color:var(--m);font-weight:600;display:block;margin-top:2px}
 .landing{display:flex;flex-direction:column;gap:14px}
 .landing .card{margin:0}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .lower{display:grid;gap:14px}
-.card.slides{position:relative;overflow:hidden;padding:0;min-height:360px}
+.card.slides{position:relative;overflow:hidden;padding:0;min-height:380px}
 .stage{position:absolute;inset:0;background:linear-gradient(135deg,rgba(27,189,130,.35),rgba(96,165,250,.3))}
+.card.slides.kids .stage{background:linear-gradient(135deg,rgba(251,191,36,.35),rgba(238,91,91,.28))}
 .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
 .stage img.on{opacity:1}
 .stage .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--gd);font-weight:650;font-size:15px;text-align:center;padding:20px}
 .stage .ph .ic{width:48px;height:48px}
-.slide-foot{position:absolute;left:0;right:0;bottom:0;padding:38px 18px 14px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:12px;line-height:1.35;pointer-events:none}
+.slide-tag{position:absolute;left:16px;top:16px;z-index:2;padding:8px 15px;border-radius:99px;background:rgba(0,0,0,.5);color:#fff;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.slide-foot{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:38px 18px 14px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:12px;line-height:1.35;pointer-events:none}
 .slide-foot:empty{display:none}
 .dots{display:flex;gap:6px;flex:none}
 .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);transition:width .3s,background .3s}
@@ -344,6 +360,7 @@ tr:last-child td{border-bottom:0}
 @media (min-width:740px){
   .lower{grid-template-columns:1fr 1fr;align-items:stretch}
   .card.quote blockquote{font-size:24px}
+  .card.slides{min-height:420px}
   main{width:calc(100% - 48px)}
   header{width:calc(100% - 48px)}
 }
@@ -371,6 +388,7 @@ tr:last-child td{border-bottom:0}
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
   <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 11L12 15.5 16.5 11M5 19h14"/></symbol>
   <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M4 18h16M7 18a5 5 0 0110 0M12 6v3M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></symbol>
   <symbol id="i-cup" viewBox="0 0 24 24"><path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5zM16 10h1.5a2.5 2.5 0 010 5H16M8 3v2M12 3v2"/></symbol>
@@ -384,7 +402,10 @@ tr:last-child td{border-bottom:0}
     <span class="logo"><svg class="ic"><use href="#i-plate"/></svg></span>
     <h1>Mess Meal Tracker</h1>
   </div>
-  <button id="btn-set" class="noprint"><svg class="ic"><use href="#i-sliders"/></svg><span>Settings</span></button>
+  <div class="hbtns noprint">
+    <button id="btn-install" class="hide"><svg class="ic"><use href="#i-download"/></svg><span>Install</span></button>
+    <button id="btn-set"><svg class="ic"><use href="#i-sliders"/></svg><span>Settings</span></button>
+  </div>
 </header>
 
 <main>
@@ -407,20 +428,41 @@ tr:last-child td{border-bottom:0}
       <button class="tile pri" id="btn-next"><svg class="ic"><use href="#i-scan"/></svg><span><b>Next student</b><small>Scan the QR code</small></span></button>
       <button class="tile" id="btn-list"><svg class="ic"><use href="#i-users"/></svg><span><b>Class list</b><small>Search and pick a student</small></span></button>
     </div>
+
+    <!-- Photo cards -->
+    <div class="lower">
+      <div class="card slides" id="show-food">
+        <div class="stage"><div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Loading photos...</span></div></div>
+        <span class="slide-tag">Food of India</span>
+        <div class="slide-foot"><span class="credit"></span><div class="dots"></div></div>
+      </div>
+      <div class="card slides kids" id="show-kids">
+        <div class="stage"><div class="ph"><svg class="ic"><use href="#i-users"/></svg><span>Loading photos...</span></div></div>
+        <span class="slide-tag">Children who go hungry</span>
+        <div class="slide-foot"><span class="credit"></span><div class="dots"></div></div>
+      </div>
+    </div>
+
+    <!-- Quote cards -->
     <div class="lower">
       <div class="card quote">
-        <span class="eyebrow">Respect your plate</span>
-        <blockquote>Food is more than a meal. It is a farmer's months of work, a family's hope, and the energy behind every child's dream.</blockquote>
-        <p>When we finish what we take, we honour all of that. Taking only what we can eat is a small act of gratitude that we can repeat three times a day.</p>
+        <span class="eyebrow">Why we should eat</span>
+        <blockquote>A child who eats well can think well, play well and dream big. Every meal is fuel for tomorrow.</blockquote>
+        <p>Growing bodies and busy minds need energy, protein and vitamins every day. Skipping meals leaves us tired, distracted and weak. Eating on time, and eating a full plate, is how we study better, stay healthy and grow strong.</p>
+        <div class="facts">
+          <div class="fact"><b>Energy</b><span>for classes, sports and growing bodies</span></div>
+          <div class="fact"><b>Focus</b><span>a fed mind learns and remembers more</span></div>
+        </div>
+      </div>
+      <div class="card quote alt">
+        <span class="eyebrow">Why we should not waste</span>
+        <blockquote>Every grain on the plate is a farmer's months of work. Wasting it forgets someone who went without.</blockquote>
+        <p>While some of us leave food on the plate, millions of children go to bed hungry. Take only what you can eat, finish what you take, and give thanks for it. It is a small act of gratitude we can repeat three times a day.</p>
         <div class="facts">
           <div class="fact"><b>733 million</b><span>people faced hunger in 2023, about 1 in 11 worldwide</span></div>
           <div class="fact"><b>1.05 billion</b><span>tonnes of food were wasted in 2022</span></div>
         </div>
-        <small class="m">Sources: UN FAO State of Food Security and Nutrition 2024; UNEP Food Waste Index Report 2024. Millions of children are among those who go to bed hungry every day.</small>
-      </div>
-      <div class="card slides">
-        <div class="stage" id="stage"><div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Loading photos...</span></div></div>
-        <div class="slide-foot"><span id="credit"></span><div class="dots" id="dots"></div></div>
+        <small class="m">Sources: UN FAO State of Food Security and Nutrition 2024; UNEP Food Waste Index Report 2024.</small>
       </div>
     </div>
   </div>
@@ -956,14 +998,31 @@ $('#btn-set').onclick=()=>{ syncKeys(); _setBtn(); };
 syncKeys();
 go('home');
 
-/* ---------- Landing slideshow: open-licensed photos fetched from Wikimedia Commons on launch ---------- */
-const SLIDE_QUERIES=['Indian thali meal','midday meal school children India','rice harvest farmer India','fresh vegetables market India','students eating lunch school','fruits and vegetables basket'];
+/* ---------- PWA: install button + service worker ---------- */
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e; $('#btn-install').classList.remove('hide');
+});
+$('#btn-install').onclick=async()=>{
+  if(!deferredInstall) return;
+  deferredInstall.prompt();
+  await deferredInstall.userChoice.catch(()=>{});
+  deferredInstall=null; $('#btn-install').classList.add('hide');
+};
+window.addEventListener('appinstalled',()=>$('#btn-install').classList.add('hide'));
+if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+/* ---------- Landing slideshows: open-licensed photos fetched from Wikimedia Commons ---------- */
+const FOOD_QUERIES=['Indian thali','South Indian meal banana leaf','North Indian cuisine dishes','Indian sweets mithai','dosa idli sambar','biryani India','Odia food pakhala','Indian street food'];
+const KIDS_QUERIES=['hungry children India','malnourished children','children poverty India','hungry children Africa','child hunger food aid','children waiting for food distribution','poor children Bangladesh','children refugee camp food'];
 const strip=h=>String(h||'').replace(/<[^>]*>/g,'').trim();
-async function loadSlides(){
-  const stage=$('#stage');
+async function slideshow(sel,queries,offline,limit){
+  const root=$(sel), stage=root.querySelector('.stage'), dotsBox=root.querySelector('.dots'), credit=root.querySelector('.credit');
   try{
-    const results=await Promise.all(SLIDE_QUERIES.map(q=>{
-      const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=6&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1000&format=json&origin=*&gsrsearch='+encodeURIComponent(q+' filetype:bitmap');
+    const results=await Promise.all(queries.map(q=>{
+      const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1000&format=json&origin=*&gsrsearch='+encodeURIComponent(q+' filetype:bitmap');
       return timed(u,{},12000).then(r=>r.json()).catch(()=>null);
     }));
     const seen=new Set(); let pics=[];
@@ -978,24 +1037,25 @@ async function loadSlides(){
       });
     });
     for(let i=pics.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pics[i],pics[j]]=[pics[j],pics[i]]; }
-    pics=pics.slice(0,10);
+    pics=pics.slice(0,limit||10);
     pics=(await Promise.all(pics.map(p=>new Promise(res=>{ const im=new Image(); im.onload=()=>res(p); im.onerror=()=>res(null); im.src=p.src; })))).filter(Boolean);
     if(!pics.length) throw new Error('no photos');
     stage.innerHTML=pics.map(p=>`<img src="${esc(p.src)}" alt="">`).join('');
-    $('#dots').innerHTML=pics.map(()=>'<i></i>').join('');
-    const imgs=stage.querySelectorAll('img'), dots=$('#dots').children;
+    dotsBox.innerHTML=pics.map(()=>'<i></i>').join('');
+    const imgs=stage.querySelectorAll('img'), dots=dotsBox.children;
     let k=0;
     const show=i=>{
       k=i; imgs.forEach((im,n)=>im.classList.toggle('on',n===i)); [...dots].forEach((d,n)=>d.classList.toggle('on',n===i));
-      const p=pics[i]; $('#credit').textContent='Photo: '+(p.by||'Wikimedia Commons')+(p.lic?' \u00b7 '+p.lic:'')+' \u00b7 Wikimedia Commons';
+      const p=pics[i]; credit.textContent='Photo: '+(p.by||'Wikimedia Commons')+(p.lic?' \u00b7 '+p.lic:'')+' \u00b7 Wikimedia Commons';
     };
     show(0);
     if(pics.length>1) setInterval(()=>show((k+1)%pics.length),5000);
   }catch(e){
-    stage.innerHTML='<div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Photos load when the tablet is online</span></div>';
+    stage.innerHTML='<div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>'+esc(offline)+'</span></div>';
   }
 }
-loadSlides();
+slideshow('#show-food',FOOD_QUERIES,'Photos load when the tablet is online',10);
+slideshow('#show-kids',KIDS_QUERIES,'Photos load when the tablet is online',10);
 </script>
 </body>
 </html>
