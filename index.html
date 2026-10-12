@@ -689,7 +689,7 @@ function renderProgress(){
 }
 
 /* ---------- Meal photo + AI ---------- */
-const GEMINI_MODELS=['gemini-3.8-flash','gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash-lite'];
+const GEMINI_MODELS=['gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash-lite'];
 const GROQ_MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
 const PROMPT='You are a nutrition assistant. The photo shows an Indian meal/thali. Identify every food item and estimate cooked weight in grams and nutrition for that portion. Return ONLY JSON: {"items":[{"name":"string","grams":number,"kcal":number,"protein_g":number,"carbs_g":number,"fat_g":number}],"confidence":"low|medium|high","note":"short string"}. If no food is visible, return empty items.';
 
