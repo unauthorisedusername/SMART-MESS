@@ -126,6 +126,10 @@ section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
 
 /* ---------- Layout helpers ---------- */
 .home-grid,.split{display:grid;gap:14px;margin-bottom:14px;align-items:start}
+.split{align-items:stretch}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.col .card{margin-bottom:0}
+.col:has(#res-card.hide) #progress{flex:1}
 .home-grid .card,.split .card{margin-bottom:0}
 .narrow{max-width:640px;margin-left:auto;margin-right:auto}
 
@@ -146,7 +150,34 @@ section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
 .fact{background:var(--glass2);border:1px solid var(--edge);border-radius:18px;padding:12px 14px;box-shadow:inset 0 1px 0 var(--hi)}
 .fact b{display:block;font-size:22px;letter-spacing:-.03em;color:var(--gd)}
 .fact span{font-size:12px;line-height:1.35;color:var(--m);font-weight:600;display:block;margin-top:2px}
-.linkwrap{text-align:center;margin:18px 0 0}
+.landing{display:flex;flex-direction:column;gap:14px}
+.landing .card{margin:0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lower{display:grid;gap:14px}
+.card.slides{position:relative;overflow:hidden;padding:0;min-height:360px}
+.stage{position:absolute;inset:0;background:linear-gradient(135deg,rgba(27,189,130,.35),rgba(96,165,250,.3))}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+.stage img.on{opacity:1}
+.stage .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--gd);font-weight:650;font-size:15px;text-align:center;padding:20px}
+.stage .ph .ic{width:48px;height:48px}
+.slide-foot{position:absolute;left:0;right:0;bottom:0;padding:38px 18px 14px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:12px;line-height:1.35;pointer-events:none}
+.slide-foot:empty{display:none}
+.dots{display:flex;gap:6px;flex:none}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);transition:width .3s,background .3s}
+.dots i.on{width:22px;border-radius:99px;background:#fff}
+.tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:22px;min-height:170px;padding:22px;text-align:left;font:inherit;color:var(--t);cursor:pointer;
+  background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);
+  border:1px solid var(--edge);border-radius:28px;box-shadow:var(--sh),inset 0 1px 0 var(--hi);transition:transform .15s,filter .2s}
+.tile:active{transform:scale(.98)}
+@media (hover:hover){.tile:hover{transform:translateY(-2px)}}
+.tile .ic{width:60px;height:60px;padding:15px;border-radius:20px;background:rgba(16,160,106,.16);color:var(--gd)}
+.tile b{display:block;font-size:26px;letter-spacing:-.025em}
+.tile small{display:block;margin-top:5px;font-size:14px;font-weight:500;color:var(--m)}
+.tile.pri{color:#fff;background:linear-gradient(135deg,#1fc58a,#0b7a52);border-color:transparent;box-shadow:0 16px 36px rgba(16,160,106,.38),inset 0 1px 0 rgba(255,255,255,.4)}
+.tile.pri .ic{background:rgba(255,255,255,.22);color:#fff}
+.tile.pri small{color:rgba(255,255,255,.85)}
+.card.quote{display:flex;flex-direction:column;justify-content:center}
+
 .linkpill{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:99px;
   background:var(--glass2);border:1px solid var(--edge);color:var(--gd);font-size:14px;font-weight:650;text-decoration:none;box-shadow:inset 0 1px 0 var(--hi)}
 
@@ -163,29 +194,33 @@ label.l:first-of-type{margin-top:0}
 small.m{color:var(--m);font-size:12.5px;line-height:1.5;display:block;margin-top:12px}
 .hide{display:none!important}
 
-/* ---------- Pick list ---------- */
-.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px;font-size:14px;font-weight:650;color:var(--m)}
-.crumb span{background:rgba(16,160,106,.15);color:var(--gd);padding:7px 15px;border-radius:99px}
-.crumb i{font-style:normal;opacity:.5;font-size:18px}
-#pk-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-#pk-body .empty{grid-column:1/-1;color:var(--m);margin:6px 0}
-#pk-back{margin-top:18px}
-.opt{
-  display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:0 20px;margin:0;
-  background:var(--glass2);color:var(--t);border:1px solid var(--edge);border-radius:20px;
-  font:inherit;font-size:17px;font-weight:620;text-align:left;cursor:pointer;
-  box-shadow:0 4px 14px rgba(20,70,48,.07),inset 0 1px 0 var(--hi);transition:transform .15s,background .2s,border-color .2s
-}
-.opt span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.opt small{font-size:12px;font-weight:700;color:var(--gd);background:rgba(16,160,106,.15);padding:5px 11px;border-radius:99px}
-.opt::after{content:"\203A";font-size:28px;line-height:1;color:var(--m);opacity:.7}
-.opt:active{transform:scale(.985);background:rgba(16,160,106,.16);border-color:var(--g)}
-@media (hover:hover){.opt:hover{border-color:var(--g);transform:translateY(-1px)}}
+/* ---------- Pick (class list) ---------- */
+.pair{display:grid;gap:14px}
+.card h2+.seg{margin-top:0}
+.lbl{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--m);margin:20px 0 9px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:50px;padding:0 20px;border-radius:15px;border:1px solid var(--edge);background:var(--glass2);font:inherit;font-size:15px;font-weight:650;color:var(--t);cursor:pointer;box-shadow:inset 0 1px 0 var(--hi);transition:transform .15s}
+.seg button:active{transform:scale(.97)}
+.seg button.on{background:linear-gradient(135deg,#1bbd82,#0b7a52);color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(16,160,106,.3),inset 0 1px 0 rgba(255,255,255,.35)}
+.list-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.list-head span{color:var(--m);font-size:14px;font-weight:600}
+.stu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px}
+.stu-grid .empty{grid-column:1/-1;color:var(--m);margin:6px 0}
+.stu{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px 16px;min-height:170px;text-align:center;font:inherit;color:var(--t);cursor:pointer;
+  background:var(--glass2);border:1px solid var(--edge);border-radius:22px;box-shadow:0 4px 14px rgba(20,70,48,.07),inset 0 1px 0 var(--hi);transition:transform .15s,border-color .2s}
+.stu b{font-size:16px;line-height:1.25;letter-spacing:-.01em}
+.stu small{font-size:12px;font-weight:700;color:var(--gd);background:rgba(16,160,106,.15);padding:4px 11px;border-radius:99px}
+.stu:active{transform:scale(.97);border-color:var(--g)}
+@media (hover:hover){.stu:hover{border-color:var(--g);transform:translateY(-2px)}}
+.steps{list-style:none;counter-reset:st;margin:0 0 20px;padding:0;display:grid;gap:14px}
+.steps li{counter-increment:st;display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;color:var(--t)}
+.steps li::before{content:counter(st);flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(135deg,#1bbd82,#0b7a52)}
 
 .av{position:relative;overflow:hidden;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none;font-style:normal;font-weight:750;font-size:16px;color:#fff;
   background:linear-gradient(135deg,#1bbd82,#2f7fd6);box-shadow:0 6px 14px rgba(47,127,214,.28),inset 0 1px 0 rgba(255,255,255,.4)}
 .av.sm{width:40px;height:40px;font-size:14px}
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.av.xl{width:88px;height:88px;font-size:30px}
 .av.lg{width:76px;height:76px;font-size:26px}
 @media (min-width:515px){.av.lg{width:96px;height:96px;font-size:32px}}
 
@@ -205,7 +240,7 @@ small.m{color:var(--m);font-size:12.5px;line-height:1.5;display:block;margin-top
 .meals{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
 .meals button{
   position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
-  min-height:92px;padding:12px 6px;border:1.5px solid var(--edge);background:var(--glass2);border-radius:20px;
+  min-height:110px;padding:12px 6px;border:1.5px solid var(--edge);background:var(--glass2);border-radius:20px;
   font:inherit;font-size:15px;font-weight:650;color:var(--t);cursor:pointer;
   box-shadow:inset 0 1px 0 var(--hi);transition:transform .15s,background .2s,border-color .2s,box-shadow .2s
 }
@@ -283,7 +318,6 @@ tr:last-child td{border-bottom:0}
 /* ---------- Tablet ---------- */
 @media (min-width:430px){
   .acts{grid-template-columns:1fr 1fr}
-  .meals{grid-template-columns:repeat(4,1fr)}
   .card.hero{flex-direction:row;justify-content:space-between;align-items:center}
   .chips{min-width:320px}
   .qrs{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
@@ -304,10 +338,12 @@ tr:last-child td{border-bottom:0}
   .who b{font-size:26px}
 }
 @media (min-width:600px){
+  .pair{grid-template-columns:1.4fr .8fr}
   .split{grid-template-columns:1.08fr .92fr}
-  #progress{position:sticky;top:92px}
 }
 @media (min-width:740px){
+  .lower{grid-template-columns:1fr 1fr;align-items:stretch}
+  .card.quote blockquote{font-size:24px}
   main{width:calc(100% - 48px)}
   header{width:calc(100% - 48px)}
 }
@@ -355,55 +391,91 @@ tr:last-child td{border-bottom:0}
 
 <!-- HOME -->
 <section id="v-home">
-  <div class="card hero">
-    <div>
-      <span class="eyebrow" id="today"></span>
-      <h2>Log the next meal</h2>
-      <p class="sub">Scan a student's QR code or pick them from the class list.</p>
-    </div>
-    <div class="chips">
-      <div class="chip"><b id="st-meals">0</b><span>meals logged today</span></div>
-      <div class="chip"><b id="st-stud">0</b><span>students today</span></div>
-    </div>
-  </div>
-
-  <div class="home-grid">
-    <div class="card">
-      <button class="btn big" id="btn-next"><svg class="ic"><use href="#i-scan"/></svg><span>Next student<small>Scan QR code</small></span></button>
-      <button class="btn big sec" id="btn-list"><svg class="ic"><use href="#i-users"/></svg><span>Choose from class list<small>Boys / Girls &rsaquo; student</small></span></button>
-    </div>
-    <div class="card quote">
-      <span class="eyebrow">Respect your plate</span>
-      <blockquote>Food is more than a meal. It is a farmer's months of work, a family's hope, and the energy behind every child's dream.</blockquote>
-      <p>When we finish what we take, we honour all of that. Taking only what we can eat is a small act of gratitude that we can repeat three times a day.</p>
-      <div class="facts">
-        <div class="fact"><b>733 million</b><span>people faced hunger in 2023, about 1 in 11 worldwide</span></div>
-        <div class="fact"><b>1.05 billion</b><span>tonnes of food were wasted in 2022</span></div>
+  <div class="landing">
+    <div class="card hero">
+      <div>
+        <span class="eyebrow" id="today"></span>
+        <h2>Log the next meal</h2>
+        <p class="sub">Scan a student's QR code or pick them from the class list.</p>
       </div>
-      <small class="m">Sources: UN FAO State of Food Security and Nutrition 2024; UNEP Food Waste Index Report 2024. Millions of children are among those who go to bed hungry every day.</small>
+      <div class="chips">
+        <div class="chip"><b id="st-meals">0</b><span>meals logged today</span></div>
+        <div class="chip"><b id="st-stud">0</b><span>students today</span></div>
+      </div>
+    </div>
+    <div class="tiles">
+      <button class="tile pri" id="btn-next"><svg class="ic"><use href="#i-scan"/></svg><span><b>Next student</b><small>Scan the QR code</small></span></button>
+      <button class="tile" id="btn-list"><svg class="ic"><use href="#i-users"/></svg><span><b>Class list</b><small>Search and pick a student</small></span></button>
+    </div>
+    <div class="lower">
+      <div class="card quote">
+        <span class="eyebrow">Respect your plate</span>
+        <blockquote>Food is more than a meal. It is a farmer's months of work, a family's hope, and the energy behind every child's dream.</blockquote>
+        <p>When we finish what we take, we honour all of that. Taking only what we can eat is a small act of gratitude that we can repeat three times a day.</p>
+        <div class="facts">
+          <div class="fact"><b>733 million</b><span>people faced hunger in 2023, about 1 in 11 worldwide</span></div>
+          <div class="fact"><b>1.05 billion</b><span>tonnes of food were wasted in 2022</span></div>
+        </div>
+        <small class="m">Sources: UN FAO State of Food Security and Nutrition 2024; UNEP Food Waste Index Report 2024. Millions of children are among those who go to bed hungry every day.</small>
+      </div>
+      <div class="card slides">
+        <div class="stage" id="stage"><div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Loading photos...</span></div></div>
+        <div class="slide-foot"><span id="credit"></span><div class="dots" id="dots"></div></div>
+      </div>
     </div>
   </div>
-  <p class="linkwrap"><a href="#" id="lnk-qrs" class="linkpill"><svg class="ic"><use href="#i-scan"/></svg>Student QR codes (for testing / printing)</a></p>
 </section>
 
 <!-- SCAN -->
 <section id="v-scan" class="hide">
-  <div class="card narrow">
-    <h2>Show the student's QR to the camera</h2>
-    <div id="qr-reader"></div>
-    <div id="scan-msg"></div>
-    <label class="btn sec" for="qr-file" style="margin-top:14px"><svg class="ic"><use href="#i-image"/></svg>Camera not working? Scan from a photo</label>
-    <input type="file" id="qr-file" accept="image/*">
-    <button class="btn sec" id="btn-scan-cancel">Cancel</button>
+  <div class="landing">
+    <div class="card hero">
+      <div>
+        <span class="eyebrow">Scan QR</span>
+        <h2>Show the student's QR to the camera</h2>
+        <p class="sub">The student's photo and meal history open automatically.</p>
+      </div>
+    </div>
+    <div class="pair">
+      <div class="card">
+        <div id="qr-reader"></div>
+        <div id="scan-msg"></div>
+      </div>
+      <div class="card">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li>Hold the QR card 15 to 20 cm from the camera.</li>
+          <li>Keep it inside the square frame.</li>
+          <li>Wait a moment, it scans by itself.</li>
+        </ol>
+        <label class="btn sec" for="qr-file"><svg class="ic"><use href="#i-image"/></svg>Scan from a photo</label>
+        <input type="file" id="qr-file" accept="image/*">
+        <button class="btn sec" id="btn-scan-cancel"><svg class="ic"><use href="#i-back"/></svg>Back to home</button>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- PICK -->
 <section id="v-pick" class="hide">
-  <div class="card">
-    <div class="crumb" id="pk-crumb"></div>
-    <div id="pk-body"></div>
-    <button class="btn sec sm" id="pk-back"><svg class="ic"><use href="#i-back"/></svg>Back</button>
+  <div class="landing">
+    <div class="card hero">
+      <div>
+        <span class="eyebrow">Class list</span>
+        <h2>Find a student</h2>
+        <p class="sub">Search by name or roll number, or choose a class below.</p>
+        <button class="btn sec sm" id="pk-back" style="margin:14px 0 0"><svg class="ic"><use href="#i-back"/></svg>Back to home</button>
+      </div>
+      <div class="chips"><input id="pk-q" type="text" placeholder="Search name or roll no." autocomplete="off"></div>
+    </div>
+    <div class="tiles">
+      <div class="card"><h2>Class</h2><div class="seg" id="pk-cls"></div></div>
+      <div class="card"><h2>Show</h2><div class="seg" id="pk-g"></div></div>
+    </div>
+    <div class="card">
+      <div class="list-head"><h2 id="pk-title"></h2><span id="pk-count"></span></div>
+      <div id="pk-body" class="stu-grid"></div>
+    </div>
   </div>
 </section>
 
@@ -433,12 +505,17 @@ tr:last-child td{border-bottom:0}
       <div id="meal-area" class="hide">
         <img id="preview" alt="Meal">
         <div id="status"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" id="progress"></div>
+      <div class="card hide" id="res-card">
+        <h2>Meal analysis</h2>
         <div id="result"></div>
         <button class="btn hide" id="btn-save" style="margin-top:12px">Save meal</button>
       </div>
     </div>
-
-    <div class="card" id="progress"></div>
   </div>
 </section>
 
@@ -467,8 +544,8 @@ tr:last-child td{border-bottom:0}
     </div>
     <div class="card">
       <h2>Data</h2>
-      <button class="btn sec" id="btn-demo">Load demo meal history</button>
-      <button class="btn red" id="btn-clear">Clear all meal records</button>
+      <button class="btn sec" id="btn-qrs"><svg class="ic"><use href="#i-scan"/></svg>Student QR codes (print / test)</button>
+      <button class="btn red" id="btn-clear">Reset to demo data</button>
       <button class="btn sec" id="set-back">Back</button>
     </div>
   </div>
@@ -534,10 +611,12 @@ const ROSTER=[
  {id:'S039',name:'Tanu Shree Mandal',cls:'10',sec:'B',house:'',g:'F'},
  {id:'S040',name:'Tapaswini Tanti',cls:'10',sec:'B',house:'',g:'F'}
 ];
-const HAS_HOUSE=ROSTER.some(s=>s.house);
+
 const MEALS=['Breakfast','Lunch','Snacks','Dinner'];
 const MICON={Breakfast:'sunrise',Lunch:'sun',Snacks:'cup',Dinner:'moon'};
-let records=store.get('records2',[]);
+let real=store.get('records3',[]);   // meals saved by the user (kept in browser)
+let records=[];                      // demo data + saved meals, rebuilt by rebuild()
+try{ localStorage.removeItem('records2'); }catch(e){}   // old saved data is discarded
 let keys=store.get('keys2',{g:'',q:''});
 
 /* ---------- Navigation ---------- */
@@ -571,12 +650,12 @@ const needGen=()=>genLib||(genLib=window.qrcode?Promise.resolve():loadScript(['h
 
 $('#btn-next').onclick=startScan;
 $('#btn-next2').onclick=()=>go('home');
-$('#btn-list').onclick=()=>{ pk={cls:null,g:null,house:null}; renderPick(); go('pick'); };
+$('#btn-list').onclick=()=>{ pk={cls:null,g:'A',q:''}; $('#pk-q').value=''; renderPick(); go('pick'); };
 $('#btn-scan-cancel').onclick=()=>go('home');
 $('#btn-set').onclick=()=>{ $('#set-g').value=keys.g; $('#set-q').value=keys.q; go('set'); };
 $('#set-back').onclick=()=>go('home');
-$('#lnk-qrs').onclick=e=>{ e.preventDefault(); renderQRs(); go('qrs'); };
-$('#qrs-back').onclick=()=>go('home');
+$('#btn-qrs').onclick=()=>{ renderQRs(); go('qrs'); };
+$('#qrs-back').onclick=()=>go('set');
 
 /* ---------- QR scan ---------- */
 function scanMsg(t,type='err'){ $('#scan-msg').innerHTML=t?`<div class="msg ${type}">${esc(t)}</div>`:''; }
@@ -621,34 +700,26 @@ $('#qr-file').onchange=async e=>{
   }catch(err){ scanMsg('No QR found in that photo.'); }
 };
 
-/* ---------- Class -> Boys/Girls -> House -> Student ---------- */
-let pk={cls:null,g:null,house:null};
+/* ---------- Class list: class + boys/girls filters, search, student tiles ---------- */
+let pk={cls:null,g:'A',q:''};
 function renderPick(){
-  const b=$('#pk-body'), c=[];
-  if(pk.cls) c.push('Class '+pk.cls);
-  if(pk.g) c.push(pk.g==='M'?'Boys':'Girls');
-  if(pk.house) c.push(pk.house);
-  $('#pk-crumb').innerHTML=c.length?c.map(x=>`<span>${esc(x)}</span>`).join('<i>&rsaquo;</i>'):'<span>Step 1: choose class</span>';
-  let h='';
-  if(!pk.cls){
-    [...new Set(ROSTER.map(s=>s.cls))].sort((a,b)=>a-b).forEach(x=>h+=`<button class="opt" data-k="cls" data-v="${esc(x)}"><span>Class ${esc(x)}</span></button>`);
-  }else if(!pk.g){
-    h+='<button class="opt" data-k="g" data-v="M"><span>Boys</span></button><button class="opt" data-k="g" data-v="F"><span>Girls</span></button>';
-  }else if(HAS_HOUSE&&!pk.house){
-    [...new Set(ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g).map(s=>s.house))].sort().forEach(x=>h+=`<button class="opt" data-k="house" data-v="${esc(x)}"><span>${esc(x)} House</span></button>`);
-    if(!h) h='<p class="empty">No students here.</p>';
-  }else{
-    ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g&&(!HAS_HOUSE||s.house===pk.house)).sort((a,b)=>a.id.localeCompare(b.id))
-      .forEach(s=>h+=`<button class="opt" data-sid="${esc(s.id)}"><i class="av sm">${esc(ini(s.name))}${photo(s)}</i><span>${esc(s.name)}</span><small>Sec ${esc(s.sec)}</small></button>`);
-  }
-  b.innerHTML=h;
-  b.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{ pk[x.dataset.k]=x.dataset.v; renderPick(); });
+  const classes=[...new Set(ROSTER.map(s=>s.cls))].sort((a,b)=>a-b);
+  if(!pk.cls) pk.cls=classes[0];
+  $('#pk-cls').innerHTML=classes.map(c=>`<button data-c="${esc(c)}" class="${c===pk.cls?'on':''}">Class ${esc(c)}</button>`).join('');
+  $('#pk-g').innerHTML=[['A','All'],['M','Boys'],['F','Girls']].map(([v,l])=>`<button data-g="${v}" class="${v===pk.g?'on':''}">${l}</button>`).join('');
+  const q=pk.q.trim().toLowerCase();
+  const list=ROSTER.filter(s=>s.cls===pk.cls&&(pk.g==='A'||s.g===pk.g)&&(!q||s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q)||String(+s.id.slice(1))===q))
+    .sort((a,b)=>a.id.localeCompare(b.id));
+  $('#pk-title').textContent='Class '+pk.cls+(pk.g==='M'?' \u00b7 Boys':pk.g==='F'?' \u00b7 Girls':'');
+  $('#pk-count').textContent=list.length+' student'+(list.length===1?'':'s');
+  const b=$('#pk-body');
+  b.innerHTML=list.length?list.map(s=>`<button class="stu" data-sid="${esc(s.id)}"><i class="av xl">${esc(ini(s.name))}${photo(s)}</i><b>${esc(s.name)}</b><small>Roll ${+s.id.slice(1)}${s.sec?' \u00b7 Sec '+esc(s.sec):''}</small></button>`).join(''):'<p class="empty">No students found.</p>';
   b.querySelectorAll('[data-sid]').forEach(x=>x.onclick=()=>openStudent(ROSTER.find(s=>s.id===x.dataset.sid)));
+  $('#pk-cls').querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{ pk.cls=x.dataset.c; renderPick(); });
+  $('#pk-g').querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>{ pk.g=x.dataset.g; renderPick(); });
 }
-$('#pk-back').onclick=()=>{
-  if(pk.house) pk.house=null; else if(pk.g) pk.g=null; else if(pk.cls) pk.cls=null; else return go('home');
-  renderPick();
-};
+$('#pk-q').oninput=e=>{ pk.q=e.target.value; renderPick(); };
+$('#pk-back').onclick=()=>go('home');
 
 /* ---------- Student screen ---------- */
 let cur=null, selMeal='Lunch', curItems=[], curTotals=null, curThumb=null, b64=null;
@@ -672,6 +743,7 @@ function resetMeal(){
   b64=null; curItems=[]; curTotals=null;
   $('#meal-area').classList.add('hide'); $('#status').innerHTML=''; $('#result').innerHTML='';
   $('#btn-save').classList.add('hide'); $('#btn-save').disabled=false;
+  $('#res-card').classList.add('hide');
 }
 
 /* ---------- Progress ---------- */
@@ -791,7 +863,7 @@ $('#btn-snap').onclick=()=>{
 $('#btn-cam-cancel').onclick=stopPlate;
 
 async function analyze(){
-  curItems=[]; curTotals=null; $('#result').innerHTML=''; $('#btn-save').classList.add('hide');
+  curItems=[]; curTotals=null; $('#result').innerHTML=''; $('#btn-save').classList.add('hide'); $('#res-card').classList.add('hide');
   if(!keys.g&&!keys.q){ $('#status').innerHTML='<div class="msg err">Add a Gemini or Groq API key in Settings.</div>'; return; }
   const steps=[];
   if(keys.g) GEMINI_MODELS.forEach(m=>steps.push({name:m,run:()=>callGemini(keys.g,m)}));
@@ -815,18 +887,19 @@ async function analyze(){
   }else h='<div class="msg info">No food detected.</div>';
   h+=`<small class="m">Confidence: ${esc(data.confidence||'n/a')}. ${esc(data.note||'')} Estimates only. Answered by ${esc(used)}.</small>`;
   curTotals=T;
-  $('#status').innerHTML=''; $('#result').innerHTML=h;
+  $('#status').innerHTML=''; $('#result').innerHTML=h; $('#res-card').classList.remove('hide');
   $('#btn-save').classList.remove('hide'); $('#btn-save').textContent='Save '+selMeal;
 }
 
 $('#btn-save').onclick=()=>{
   if(!cur||!curTotals) return;
   const date=ymd(new Date());
-  records=records.filter(r=>!(r.sid===cur.id&&r.date===date&&r.meal===selMeal));
-  records.push({sid:cur.id,name:cur.name,date,meal:selMeal,time:new Date().toTimeString().slice(0,5),
+  real=real.filter(r=>!(r.sid===cur.id&&r.date===date&&r.meal===selMeal));
+  real.push({sid:cur.id,name:cur.name,date,meal:selMeal,time:new Date().toTimeString().slice(0,5),
     kcal:Math.round(curTotals.kcal),protein:r1(curTotals.p),carbs:r1(curTotals.c),fat:r1(curTotals.f),
     items:curItems.map(i=>({name:i.name,g:i.g})),thumb:curThumb});
-  if(store.set('records2',records)){
+  if(store.set('records3',real)){
+    rebuild();
     $('#btn-save').disabled=true;
     $('#status').innerHTML=`<div class="msg good">${esc(selMeal)} saved for ${esc(cur.name)}.</div>`;
     renderMeals(); renderProgress();
@@ -850,9 +923,11 @@ $('#set-save').onclick=()=>{
   $('#set-msg').innerHTML='<div class="msg good">Saved.</div>';
   setTimeout(()=>$('#set-msg').innerHTML='',2000);
 };
-$('#btn-clear').onclick=()=>{ if(confirm('Delete all meal records?')){ records=[]; store.set('records2',records); } };
-function seedDemo(){
-  const rnd=Math.random, nowIdx=MEALS.indexOf(autoMeal());
+$('#btn-clear').onclick=()=>{ if(confirm('Remove meals you saved and go back to demo data only?')){ real=[]; store.set('records3',real); rebuild(); $('#set-msg').innerHTML='<div class="msg good">Reset to demo data.</div>'; } };
+/* Demo data is regenerated on every open (never stored); meals the user saves are added on top. */
+function buildDemo(){
+  let seed=2026; const rnd=()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+  const out=[], nowIdx=MEALS.indexOf(autoMeal());
   ROSTER.forEach((s,idx)=>{
     const rate=[0.95,0.8,0.55,0.3,0.9][idx%5];
     for(let i=0;i<=6;i++){
@@ -861,15 +936,17 @@ function seedDemo(){
         if(i===0&&mi>=nowIdx) return;   // today: only meals already passed
         if(rnd()>rate) return;
         const base={Breakfast:380,Lunch:800,Snacks:250,Dinner:760}[m]*(0.85+rnd()*0.25);
-        records=records.filter(r=>!(r.sid===s.id&&r.date===date&&r.meal===m));
-        records.push({sid:s.id,name:s.name,date,meal:m,time:'12:00',kcal:Math.round(base),protein:r1(base*0.027),carbs:r1(base*0.13),fat:r1(base*0.03),items:[],thumb:''});
+        out.push({sid:s.id,name:s.name,date,meal:m,time:'12:00',kcal:Math.round(base),protein:r1(base*0.027),carbs:r1(base*0.13),fat:r1(base*0.03),items:[],thumb:''});
       });
     }
   });
-  store.set('records2',records);
+  return out;
 }
-$('#btn-demo').onclick=()=>{ seedDemo(); $('#set-msg').innerHTML='<div class="msg good">Demo history loaded.</div>'; };
-if(!store.get('seeded',false)&&!records.length){ seedDemo(); store.set('seeded',true); }
+function rebuild(){
+  const k=r=>r.sid+'|'+r.date+'|'+r.meal, used=new Set(real.map(k));
+  records=buildDemo().filter(r=>!used.has(k(r))).concat(real);
+}
+rebuild();
 
 function syncKeys(){ $('#set-g').value=keys.g; $('#set-q').value=keys.q; }
 const _save=$('#set-save').onclick;
@@ -878,6 +955,47 @@ const _setBtn=$('#btn-set').onclick;
 $('#btn-set').onclick=()=>{ syncKeys(); _setBtn(); };
 syncKeys();
 go('home');
+
+/* ---------- Landing slideshow: open-licensed photos fetched from Wikimedia Commons on launch ---------- */
+const SLIDE_QUERIES=['Indian thali meal','midday meal school children India','rice harvest farmer India','fresh vegetables market India','students eating lunch school','fruits and vegetables basket'];
+const strip=h=>String(h||'').replace(/<[^>]*>/g,'').trim();
+async function loadSlides(){
+  const stage=$('#stage');
+  try{
+    const results=await Promise.all(SLIDE_QUERIES.map(q=>{
+      const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=6&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1000&format=json&origin=*&gsrsearch='+encodeURIComponent(q+' filetype:bitmap');
+      return timed(u,{},12000).then(r=>r.json()).catch(()=>null);
+    }));
+    const seen=new Set(); let pics=[];
+    results.forEach(j=>{
+      if(!j||!j.query||!j.query.pages) return;
+      Object.values(j.query.pages).forEach(p=>{
+        const ii=p.imageinfo&&p.imageinfo[0];
+        if(!ii||ii.mime!=='image/jpeg'||!ii.thumburl||seen.has(ii.thumburl)) return;
+        seen.add(ii.thumburl);
+        const em=ii.extmetadata||{};
+        pics.push({src:ii.thumburl,lic:strip(em.LicenseShortName&&em.LicenseShortName.value),by:strip(em.Artist&&em.Artist.value).slice(0,40)});
+      });
+    });
+    for(let i=pics.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pics[i],pics[j]]=[pics[j],pics[i]]; }
+    pics=pics.slice(0,10);
+    pics=(await Promise.all(pics.map(p=>new Promise(res=>{ const im=new Image(); im.onload=()=>res(p); im.onerror=()=>res(null); im.src=p.src; })))).filter(Boolean);
+    if(!pics.length) throw new Error('no photos');
+    stage.innerHTML=pics.map(p=>`<img src="${esc(p.src)}" alt="">`).join('');
+    $('#dots').innerHTML=pics.map(()=>'<i></i>').join('');
+    const imgs=stage.querySelectorAll('img'), dots=$('#dots').children;
+    let k=0;
+    const show=i=>{
+      k=i; imgs.forEach((im,n)=>im.classList.toggle('on',n===i)); [...dots].forEach((d,n)=>d.classList.toggle('on',n===i));
+      const p=pics[i]; $('#credit').textContent='Photo: '+(p.by||'Wikimedia Commons')+(p.lic?' \u00b7 '+p.lic:'')+' \u00b7 Wikimedia Commons';
+    };
+    show(0);
+    if(pics.length>1) setInterval(()=>show((k+1)%pics.length),5000);
+  }catch(e){
+    stage.innerHTML='<div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Photos load when the tablet is online</span></div>';
+  }
+}
+loadSlides();
 </script>
 </body>
 </html>
