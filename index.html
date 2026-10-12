@@ -2,90 +2,381 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#d6f4e6">
 <title>Mess Meal Tracker</title>
 <style>
-:root{--g:#1b7f4b;--gd:#145f38;--bg:#f3f6f4;--t:#1d2a23;--m:#6b7a72;--b:#dbe3de;--r:#d64545;--a:#e0a100}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--t)}
-header{background:var(--g);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-header h1{margin:0;font-size:19px}
-header button{background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:14px}
-main{max-width:640px;margin:0 auto;padding:14px}
-.card{background:#fff;border:1px solid var(--b);border-radius:12px;padding:14px;margin-bottom:12px}
-.card h2{margin:0 0 10px;font-size:16px}
-.btn{display:block;width:100%;text-align:center;background:var(--g);color:#fff;border:0;border-radius:10px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:8px}
-.btn.sec{background:#e5ebe7;color:var(--t)}
-.btn.red{background:var(--r)}
-.btn.big{padding:22px;font-size:19px}
-.btn:disabled{opacity:.5}
-.opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--b);border-radius:10px;padding:13px;font-size:16px;margin-bottom:8px;cursor:pointer;color:var(--t)}
-.opt small{color:var(--m);float:right}
-.opt:active{background:#e8f5ee}
+:root{
+  --g:#10a06a;--gd:#0a6f49;--r:#e04a4a;--a:#e8a300;
+  --t:#10231a;--m:#587065;
+  --bg1:#d6f4e6;--bg2:#dfeeff;--bg3:#fff0d9;
+  --glass:linear-gradient(145deg,rgba(255,255,255,.68),rgba(255,255,255,.36));
+  --glass2:rgba(255,255,255,.52);
+  --glass3:rgba(255,255,255,.8);
+  --edge:rgba(255,255,255,.72);
+  --line:rgba(16,35,26,.1);
+  --hi:rgba(255,255,255,.85);
+  --sh:0 14px 44px rgba(20,70,48,.14),0 2px 6px rgba(20,70,48,.06);
+  --solid:#f4faf6;
+  --err-t:#9a1f1f;--info-t:#1e4a8c;--good-t:#0a6f49;
+  --rad:26px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --gd:#6ee7b7;
+    --t:#e9f4ee;--m:#93aa9d;
+    --bg1:#06130e;--bg2:#08121c;--bg3:#16110a;
+    --glass:linear-gradient(145deg,rgba(46,70,60,.62),rgba(20,34,28,.42));
+    --glass2:rgba(255,255,255,.07);
+    --glass3:rgba(255,255,255,.1);
+    --edge:rgba(255,255,255,.14);
+    --line:rgba(255,255,255,.12);
+    --hi:rgba(255,255,255,.14);
+    --sh:0 14px 44px rgba(0,0,0,.5);
+    --solid:#15231c;
+    --err-t:#ffb4b4;--info-t:#a9ccff;--good-t:#7ee9b9;
+  }
+  .bg i{opacity:.34!important}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;min-height:100dvh;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color:var(--t);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2) 50%,var(--bg3)) fixed;
+  -webkit-font-smoothing:antialiased;touch-action:manipulation;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ---------- Ambient background orbs ---------- */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.6;will-change:transform}
+.bg i:nth-child(1){width:55vmax;height:55vmax;left:-15vmax;top:-18vmax;background:radial-gradient(circle,#34d399,transparent 68%);animation:d1 26s ease-in-out infinite alternate}
+.bg i:nth-child(2){width:50vmax;height:50vmax;right:-14vmax;top:12vh;background:radial-gradient(circle,#60a5fa,transparent 68%);animation:d2 32s ease-in-out infinite alternate}
+.bg i:nth-child(3){width:46vmax;height:46vmax;left:20vw;bottom:-22vmax;background:radial-gradient(circle,#fbbf24,transparent 68%);animation:d3 29s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(9vmax,6vmax) scale(1.12)}}
+@keyframes d2{to{transform:translate(-8vmax,7vmax) scale(1.08)}}
+@keyframes d3{to{transform:translate(-6vmax,-8vmax) scale(1.15)}}
+
+/* ---------- Icons ---------- */
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- Glass surfaces ---------- */
+.card,header{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(24px) saturate(170%);
+  backdrop-filter:blur(24px) saturate(170%);
+  border:1px solid var(--edge);
+  box-shadow:var(--sh),inset 0 1px 0 var(--hi);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .card,header{background:var(--solid)}
+}
+.card{border-radius:var(--rad);padding:20px;margin-bottom:14px}
+.card h2{margin:0 0 14px;font-size:17px;font-weight:700;letter-spacing:-.01em}
+
+/* ---------- Header ---------- */
+header{
+  position:sticky;top:10px;z-index:30;
+  width:calc(100% - 24px);max-width:1120px;margin:10px auto 0;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:10px 12px 10px 14px;border-radius:22px;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;flex:none;
+  background:linear-gradient(135deg,#25c78d,#0b7a52);box-shadow:0 6px 16px rgba(16,160,106,.4),inset 0 1px 0 rgba(255,255,255,.4)}
+header h1{margin:0;font-size:19px;font-weight:750;letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header button{
+  display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;
+  background:var(--glass2);color:var(--t);border:1px solid var(--edge);border-radius:15px;
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:transform .15s,background .2s;
+  box-shadow:inset 0 1px 0 var(--hi)
+}
+header button:active{transform:scale(.97)}
+
+main{width:calc(100% - 24px);max-width:1120px;margin:0 auto;padding:16px 0 56px}
+section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:58px;padding:0 20px;margin-bottom:10px;
+  border:0;border-radius:18px;font:inherit;font-size:16px;font-weight:650;text-align:center;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,#1bbd82,#0b7a52);
+  box-shadow:0 10px 24px rgba(16,160,106,.32),inset 0 1px 0 rgba(255,255,255,.38);
+  transition:transform .15s,box-shadow .2s,filter .2s
+}
+.btn:active{transform:scale(.98)}
+@media (hover:hover){.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn:active{transform:scale(.98)}}
+.btn.sec{background:var(--glass2);color:var(--t);border:1px solid var(--edge);box-shadow:0 6px 16px rgba(20,70,48,.08),inset 0 1px 0 var(--hi)}
+.btn.red{background:linear-gradient(135deg,#ee5b5b,#c53030);box-shadow:0 10px 24px rgba(214,69,69,.3),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn:disabled{opacity:.5;pointer-events:none}
+.btn.big{min-height:88px;justify-content:flex-start;padding:0 24px;font-size:19px;text-align:left;gap:16px}
+.btn.big .ic{width:40px;height:40px;padding:9px;border-radius:14px;background:rgba(255,255,255,.22)}
+.btn.big.sec .ic{background:rgba(16,160,106,.15);color:var(--gd)}
+.btn.big span{display:flex;flex-direction:column;gap:3px;line-height:1.15}
+.btn.big small{font-size:13px;font-weight:500;opacity:.8}
+.btn.sm{width:auto;display:inline-flex;min-height:50px;padding:0 20px;margin-bottom:14px}
+.card>.btn:last-child{margin-bottom:0}
+.acts{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:6px}
+.acts .btn{margin-bottom:0}
+
+/* ---------- Layout helpers ---------- */
+.home-grid,.split{display:grid;gap:14px;margin-bottom:14px;align-items:start}
+.home-grid .card,.split .card{margin-bottom:0}
+.narrow{max-width:640px;margin-left:auto;margin-right:auto}
+
+/* ---------- Home ---------- */
+.card.hero{display:flex;flex-direction:column;gap:18px;margin-bottom:14px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--gd)}
+.card.hero h2{font-size:26px;margin:6px 0 6px;letter-spacing:-.025em}
+.sub{margin:0;color:var(--m);font-size:15px;line-height:1.45}
+.chips{display:flex;gap:10px}
+.chip{flex:1;background:var(--glass2);border:1px solid var(--edge);border-radius:18px;padding:12px 16px;box-shadow:inset 0 1px 0 var(--hi)}
+.chip b{display:block;font-size:28px;letter-spacing:-.03em;line-height:1.1}
+.chip span{font-size:12px;color:var(--m);font-weight:600}
+.linkwrap{text-align:center;margin:18px 0 0}
+.linkpill{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:99px;
+  background:var(--glass2);border:1px solid var(--edge);color:var(--gd);font-size:14px;font-weight:650;text-decoration:none;box-shadow:inset 0 1px 0 var(--hi)}
+
+/* ---------- Forms ---------- */
 input[type=file]{display:none}
-input[type=password],input[type=text]{width:100%;padding:10px;border:1px solid var(--b);border-radius:8px;font-size:15px}
-label.l{font-size:13px;color:var(--m);display:block;margin:10px 0 4px}
+input[type=password],input[type=text]{
+  width:100%;min-height:54px;padding:0 16px;font:inherit;font-size:16px;color:var(--t);
+  background:var(--glass3);border:1px solid var(--line);border-radius:16px;outline:0;
+  transition:border-color .2s,box-shadow .2s
+}
+input[type=password]:focus,input[type=text]:focus{border-color:var(--g);box-shadow:0 0 0 4px rgba(16,160,106,.2)}
+label.l{font-size:13px;font-weight:600;color:var(--m);display:block;margin:16px 0 7px;letter-spacing:.01em}
+label.l:first-of-type{margin-top:0}
+small.m{color:var(--m);font-size:12.5px;line-height:1.5;display:block;margin-top:12px}
 .hide{display:none!important}
-.who{background:#e8f5ee;border-radius:10px;padding:12px;margin-bottom:12px}
-.who b{font-size:20px}
-.who div{color:var(--m);font-size:14px;margin-top:2px}
-.meals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.meals button{padding:12px 6px;border:2px solid var(--b);background:#fff;border-radius:10px;font-size:15px;font-weight:600;color:var(--t)}
-.meals button.on{border-color:var(--g);background:#e8f5ee;color:var(--gd)}
-.meals button.done::after{content:" \2713";color:var(--g)}
-.crumb{font-size:13px;color:var(--m);margin-bottom:10px}
-#qr-reader{width:100%;border-radius:10px;overflow:hidden;background:#000}
-#preview{width:100%;max-height:260px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+
+/* ---------- Pick list ---------- */
+.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px;font-size:14px;font-weight:650;color:var(--m)}
+.crumb span{background:rgba(16,160,106,.15);color:var(--gd);padding:7px 15px;border-radius:99px}
+.crumb i{font-style:normal;opacity:.5;font-size:18px}
+#pk-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+#pk-body .empty{grid-column:1/-1;color:var(--m);margin:6px 0}
+#pk-back{margin-top:18px}
+.opt{
+  display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:0 20px;margin:0;
+  background:var(--glass2);color:var(--t);border:1px solid var(--edge);border-radius:20px;
+  font:inherit;font-size:17px;font-weight:620;text-align:left;cursor:pointer;
+  box-shadow:0 4px 14px rgba(20,70,48,.07),inset 0 1px 0 var(--hi);transition:transform .15s,background .2s,border-color .2s
+}
+.opt span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opt small{font-size:12px;font-weight:700;color:var(--gd);background:rgba(16,160,106,.15);padding:5px 11px;border-radius:99px}
+.opt::after{content:"\203A";font-size:28px;line-height:1;color:var(--m);opacity:.7}
+.opt:active{transform:scale(.985);background:rgba(16,160,106,.16);border-color:var(--g)}
+@media (hover:hover){.opt:hover{border-color:var(--g);transform:translateY(-1px)}}
+
+.av{position:relative;overflow:hidden;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none;font-style:normal;font-weight:750;font-size:16px;color:#fff;
+  background:linear-gradient(135deg,#1bbd82,#2f7fd6);box-shadow:0 6px 14px rgba(47,127,214,.28),inset 0 1px 0 rgba(255,255,255,.4)}
+.av.sm{width:40px;height:40px;font-size:14px}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.av.lg{width:76px;height:76px;font-size:26px}
+@media (min-width:768px){.av.lg{width:96px;height:96px;font-size:32px}}
+
+/* ---------- Scan ---------- */
+#qr-reader{width:100%;border-radius:22px;overflow:hidden;background:#0b1511;border:1px solid var(--edge)}
+#qr-reader video{object-fit:cover}
+#scan-msg:empty{display:none}
+
+/* ---------- Student ---------- */
+.card.who{display:flex;align-items:center;gap:18px;padding:18px 22px;margin-bottom:14px}
+.who .wi{flex:1;min-width:0}
+.who b{display:block;font-size:23px;letter-spacing:-.02em;margin-bottom:8px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:13px;font-weight:650;padding:5px 13px;border-radius:99px;background:var(--glass2);border:1px solid var(--edge);color:var(--t)}
+.tag.id{color:var(--gd);background:rgba(16,160,106,.14);border-color:transparent}
+
+.meals{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.meals button{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  min-height:92px;padding:12px 6px;border:1.5px solid var(--edge);background:var(--glass2);border-radius:20px;
+  font:inherit;font-size:15px;font-weight:650;color:var(--t);cursor:pointer;
+  box-shadow:inset 0 1px 0 var(--hi);transition:transform .15s,background .2s,border-color .2s,box-shadow .2s
+}
+.meals button .ic{width:28px;height:28px;color:var(--m);transition:color .2s}
+.meals button:active{transform:scale(.97)}
+.meals button.on{
+  border-color:var(--g);color:var(--gd);
+  background:linear-gradient(145deg,rgba(27,189,130,.3),rgba(27,189,130,.1));
+  box-shadow:0 0 0 4px rgba(16,160,106,.15),0 10px 22px rgba(16,160,106,.2),inset 0 1px 0 var(--hi)
+}
+.meals button.on .ic{color:var(--g)}
+.meals button.done::after{content:"\2713";position:absolute;top:8px;right:8px;width:21px;height:21px;border-radius:50%;
+  background:var(--g);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;box-shadow:0 3px 8px rgba(16,160,106,.4)}
+
+#cam-box{margin:14px 0 4px}
+#cam-box .acts{margin-top:12px}
+#plate-video{width:100%;max-height:60vh;object-fit:cover;border-radius:22px;background:#000;display:block;border:1px solid var(--edge)}
+#preview{width:100%;max-height:320px;object-fit:cover;border-radius:22px;margin:16px 0 10px;display:block;border:1px solid var(--edge)}
+
+/* ---------- Messages ---------- */
+.msg{display:block;padding:12px 15px;border-radius:16px;margin:10px 0;font-size:14px;line-height:1.5;border:1px solid transparent}
+.err{background:rgba(224,74,74,.13);color:var(--err-t);border-color:rgba(224,74,74,.28)}
+.info{background:rgba(59,130,246,.12);color:var(--info-t);border-color:rgba(59,130,246,.25)}
+.good{background:rgba(16,160,106,.14);color:var(--good-t);border-color:rgba(16,160,106,.28)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;margin-right:9px;vertical-align:-2px;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---------- Tables ---------- */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:6px 4px;text-align:left;border-bottom:1px solid var(--b)}
-th{font-size:12px;color:var(--m)}
-.tot td{font-weight:700;background:#f3f6f4}
-.tw{overflow-x:auto}
-.msg{padding:10px;border-radius:8px;margin:8px 0;font-size:14px}
-.err{background:#fdeaea;color:#8f1d1d}
-.info{background:#e8f1fb;color:#1d4a7f}
-.good{background:#e8f5ee;color:var(--gd)}
-.pill{display:inline-block;padding:3px 11px;border-radius:99px;font-size:13px;font-weight:700;color:#fff}
-.ok{background:var(--g)}.watch{background:var(--a)}.risk{background:var(--r)}
-.bar{height:12px;background:#e5ebe7;border-radius:99px;overflow:hidden;margin:8px 0}
-.bar i{display:block;height:100%;background:var(--g)}
-.pg td,.pg th{text-align:center;padding:5px 2px}
-.pg td:first-child,.pg th:first-child{text-align:left}
-.yes{color:var(--g);font-weight:700}.no{color:#c0c8c3}
-.qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.qrc{border:1px solid var(--b);border-radius:10px;padding:8px;text-align:center;font-size:12px;background:#fff}
-small.m{color:var(--m)}
-@media print{header,.noprint{display:none!important}}
+th,td{padding:11px 8px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--m);font-weight:700}
+tr:last-child td{border-bottom:0}
+.tot td{font-weight:800;background:rgba(16,160,106,.12)}
+.tot td:first-child{border-radius:12px 0 0 12px}
+.tot td:last-child{border-radius:0 12px 12px 0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 8px}
+.stat{background:var(--glass2);border:1px solid var(--edge);border-radius:16px;padding:12px 4px;text-align:center;box-shadow:inset 0 1px 0 var(--hi)}
+.stat b{display:block;font-size:21px;letter-spacing:-.03em}
+.stat span{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--m)}
+
+/* ---------- Progress ---------- */
+.prog-top{display:flex;align-items:center;gap:20px;margin-bottom:18px}
+.ring{position:relative;width:112px;height:112px;flex:none;display:grid;place-items:center}
+.ring::before{content:"";position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(var(--rc) calc(var(--p)*1%),rgba(128,150,140,.22) 0);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 13px),#000 calc(100% - 12px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 13px),#000 calc(100% - 12px))}
+.ring b{position:relative;font-size:27px;letter-spacing:-.03em}
+.r-ok{--rc:#12b37a}.r-watch{--rc:#e8a300}.r-risk{--rc:#e04a4a}
+.prog-info{flex:1;min-width:0}
+.prog-info .of{font-size:13px;color:var(--m);margin-top:8px}
+.pill{display:inline-block;padding:6px 15px;border-radius:99px;font-size:13px;font-weight:700;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.pill.ok{background:linear-gradient(135deg,#1bbd82,#0b7a52)}
+.pill.watch{background:linear-gradient(135deg,#f0b429,#c98700)}
+.pill.risk{background:linear-gradient(135deg,#ee5b5b,#c53030)}
+.mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mini span{background:var(--glass2);border:1px solid var(--edge);padding:6px 12px;border-radius:99px;font-size:13px;font-weight:600}
+.pg td,.pg th{text-align:center;padding:8px 2px}
+.pg td:first-child,.pg th:first-child{text-align:left;font-weight:650}
+.pg th.tdy{color:var(--g)}
+.ck{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:9px;background:rgba(128,150,140,.16);color:#fff;font-size:13px;font-weight:800}
+.ck.on{background:linear-gradient(135deg,#1bbd82,#0b7a52);box-shadow:0 3px 8px rgba(16,160,106,.35)}
+
+/* ---------- QR list ---------- */
+.qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.qrc{border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;font-size:12px;background:#fff;color:#10231a}
+.qrc img{max-width:100%;height:auto}
+
+/* ---------- Tablet ---------- */
+@media (min-width:640px){
+  .acts{grid-template-columns:1fr 1fr}
+  .meals{grid-template-columns:repeat(4,1fr)}
+  .card.hero{flex-direction:row;justify-content:space-between;align-items:center}
+  .chips{min-width:320px}
+  .qrs{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+}
+@media (min-width:768px){
+  header{padding:12px 14px 12px 18px}
+  header h1{font-size:21px}
+  main{padding-top:20px}
+  .card{padding:26px}
+  .card h2{font-size:18px;margin-bottom:16px}
+  .home-grid{grid-template-columns:1fr 1fr}
+  .card.hero h2{font-size:30px}
+  .ck{width:30px;height:30px;font-size:14px}
+  .ring{width:124px;height:124px}
+  .ring b{font-size:30px}
+  .pg td,.pg th{padding:10px 3px}
+  .card.who{padding:22px 26px}
+  .who b{font-size:26px}
+}
+@media (min-width:900px){
+  .split{grid-template-columns:1.08fr .92fr}
+  #progress{position:sticky;top:92px}
+}
+@media (min-width:1100px){
+  main{width:calc(100% - 48px)}
+  header{width:calc(100% - 48px)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .bg i{animation:none}
+  section:not(.hide){animation:none}
+}
+@media print{
+  header,.noprint,.bg{display:none!important}
+  body{background:#fff}
+  .card{background:#fff;box-shadow:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 </style>
 </head>
 <body>
-<header><h1>Mess Meal Tracker</h1><button id="btn-set" class="noprint">Settings</button></header>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-plate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/></symbol>
+  <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M8 12h8"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.2a3.2 3.2 0 010 5.6M18 14.3c1.7.7 2.8 2.3 3.2 4.7"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M4 18h16M7 18a5 5 0 0110 0M12 6v3M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5zM16 10h1.5a2.5 2.5 0 010 5H16M8 3v2M12 3v2"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></symbol>
+</svg>
+
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header>
+  <div class="brand">
+    <span class="logo"><svg class="ic"><use href="#i-plate"/></svg></span>
+    <h1>Mess Meal Tracker</h1>
+  </div>
+  <button id="btn-set" class="noprint"><svg class="ic"><use href="#i-sliders"/></svg><span>Settings</span></button>
+</header>
+
 <main>
 
 <!-- HOME -->
 <section id="v-home">
-  <div class="card">
-    <button class="btn big" id="btn-next">Next student (scan QR)</button>
-    <button class="btn sec" id="btn-list">Choose from class list</button>
+  <div class="card hero">
+    <div>
+      <span class="eyebrow" id="today"></span>
+      <h2>Log the next meal</h2>
+      <p class="sub">Scan a student's QR code or pick them from the class list.</p>
+    </div>
+    <div class="chips">
+      <div class="chip"><b id="st-meals">0</b><span>meals logged today</span></div>
+      <div class="chip"><b id="st-stud">0</b><span>students today</span></div>
+    </div>
   </div>
-  <div class="card">
-    <h2>Engines</h2>
-    <label class="l">Main engine: Gemini API key</label>
-    <input id="hk-g" type="password" placeholder="AIza..." autocomplete="off">
-    <label class="l">Backup engine: Groq API key (optional)</label>
-    <input id="hk-q" type="password" placeholder="gsk_..." autocomplete="off">
-    <small class="m">Saved automatically. If Gemini fails, it tries other Gemini models, then Groq.</small>
+
+  <div class="home-grid">
+    <div class="card">
+      <button class="btn big" id="btn-next"><svg class="ic"><use href="#i-scan"/></svg><span>Next student<small>Scan QR code</small></span></button>
+      <button class="btn big sec" id="btn-list"><svg class="ic"><use href="#i-users"/></svg><span>Choose from class list<small>Boys / Girls &rsaquo; student</small></span></button>
+    </div>
+    <div class="card">
+      <h2>Engines</h2>
+      <label class="l">Main engine: Gemini API key</label>
+      <input id="hk-g" type="password" placeholder="AIza..." autocomplete="off">
+      <label class="l">Backup engine: Groq API key (optional)</label>
+      <input id="hk-q" type="password" placeholder="gsk_..." autocomplete="off">
+      <small class="m">Saved automatically. If Gemini fails, it tries other Gemini models, then Groq.</small>
+    </div>
   </div>
-  <p style="text-align:center"><a href="#" id="lnk-qrs" style="color:var(--g);font-size:14px">Student QR codes (for testing / printing)</a></p>
+  <p class="linkwrap"><a href="#" id="lnk-qrs" class="linkpill"><svg class="ic"><use href="#i-scan"/></svg>Student QR codes (for testing / printing)</a></p>
 </section>
 
 <!-- SCAN -->
 <section id="v-scan" class="hide">
-  <div class="card">
+  <div class="card narrow">
     <h2>Show the student's QR to the camera</h2>
     <div id="qr-reader"></div>
     <div id="scan-msg"></div>
-    <label class="btn sec" for="qr-file" style="margin-top:10px">Camera not working? Scan from a photo</label>
+    <label class="btn sec" for="qr-file" style="margin-top:14px"><svg class="ic"><use href="#i-image"/></svg>Camera not working? Scan from a photo</label>
     <input type="file" id="qr-file" accept="image/*">
     <button class="btn sec" id="btn-scan-cancel">Cancel</button>
   </div>
@@ -96,66 +387,74 @@ small.m{color:var(--m)}
   <div class="card">
     <div class="crumb" id="pk-crumb"></div>
     <div id="pk-body"></div>
-    <button class="btn sec" id="pk-back">Back</button>
+    <button class="btn sec sm" id="pk-back"><svg class="ic"><use href="#i-back"/></svg>Back</button>
   </div>
 </section>
 
 <!-- STUDENT -->
 <section id="v-student" class="hide">
-  <button class="btn sec" id="btn-next2">&larr; Next student</button>
-  <div class="who" id="who"></div>
+  <button class="btn sec sm" id="btn-next2"><svg class="ic"><use href="#i-back"/></svg>Next student</button>
+  <div class="card who" id="who"></div>
 
-  <div class="card">
-    <h2>Add meal</h2>
-    <div class="meals" id="meals"></div>
-    <button class="btn" id="btn-cam">Take photo of plate (camera)</button>
-    <div id="cam-box" class="hide">
-      <video id="plate-video" playsinline muted style="width:100%;max-height:60vh;object-fit:cover;border-radius:10px;background:#000"></video>
-      <button class="btn" id="btn-snap" style="margin-top:8px">Capture</button>
-      <button class="btn sec" id="btn-cam-cancel">Cancel camera</button>
+  <div class="split">
+    <div class="card">
+      <h2>Add meal</h2>
+      <div class="meals" id="meals"></div>
+      <div class="acts">
+        <button class="btn" id="btn-cam"><svg class="ic"><use href="#i-camera"/></svg>Take photo of plate</button>
+        <label class="btn sec" for="meal-file" id="lbl-add"><svg class="ic"><use href="#i-image"/></svg>Choose from gallery</label>
+      </div>
+      <div id="cam-box" class="hide">
+        <video id="plate-video" playsinline muted></video>
+        <div class="acts">
+          <button class="btn" id="btn-snap">Capture</button>
+          <button class="btn sec" id="btn-cam-cancel">Cancel camera</button>
+        </div>
+      </div>
+      <div id="cam-msg"></div>
+      <input type="file" id="meal-file" accept="image/*">
+      <input type="file" id="meal-cam" accept="image/*" capture="environment">
+      <div id="meal-area" class="hide">
+        <img id="preview" alt="Meal">
+        <div id="status"></div>
+        <div id="result"></div>
+        <button class="btn hide" id="btn-save" style="margin-top:12px">Save meal</button>
+      </div>
     </div>
-    <div id="cam-msg"></div>
-    <label class="btn sec" for="meal-file" id="lbl-add">Add meal (choose photo)</label>
-    <input type="file" id="meal-file" accept="image/*">
-    <input type="file" id="meal-cam" accept="image/*" capture="environment">
-    <div id="meal-area" class="hide">
-      <img id="preview" alt="Meal">
-      <div id="status"></div>
-      <div id="result"></div>
-      <button class="btn hide" id="btn-save">Save meal</button>
-    </div>
+
+    <div class="card" id="progress"></div>
   </div>
-
-  <div class="card" id="progress"></div>
 </section>
 
 <!-- QR LIST -->
 <section id="v-qrs" class="hide">
   <div class="card">
-    <div class="noprint">
+    <div class="noprint acts">
       <button class="btn sec" onclick="window.print()">Print</button>
       <button class="btn sec" id="qrs-back">Back</button>
     </div>
-    <div class="qrs" id="qr-list"></div>
+    <div class="qrs" id="qr-list" style="margin-top:14px"></div>
   </div>
 </section>
 
 <!-- SETTINGS -->
 <section id="v-set" class="hide">
-  <div class="card">
-    <h2>API keys</h2>
-    <label class="l">Gemini API key (aistudio.google.com/apikey)</label>
-    <input id="set-g" type="password" placeholder="AIza..." autocomplete="off">
-    <label class="l">Backup: Groq API key (console.groq.com/keys)</label>
-    <input id="set-q" type="password" placeholder="gsk_..." autocomplete="off">
-    <button class="btn" id="set-save" style="margin-top:12px">Save</button>
-    <div id="set-msg"></div>
-  </div>
-  <div class="card">
-    <h2>Data</h2>
-    <button class="btn sec" id="btn-demo">Load demo meal history</button>
-    <button class="btn red" id="btn-clear">Clear all meal records</button>
-    <button class="btn sec" id="set-back">Back</button>
+  <div class="home-grid">
+    <div class="card">
+      <h2>API keys</h2>
+      <label class="l">Gemini API key (aistudio.google.com/apikey)</label>
+      <input id="set-g" type="password" placeholder="AIza..." autocomplete="off">
+      <label class="l">Backup: Groq API key (console.groq.com/keys)</label>
+      <input id="set-q" type="password" placeholder="gsk_..." autocomplete="off">
+      <button class="btn" id="set-save" style="margin-top:18px">Save</button>
+      <div id="set-msg"></div>
+    </div>
+    <div class="card">
+      <h2>Data</h2>
+      <button class="btn sec" id="btn-demo">Load demo meal history</button>
+      <button class="btn red" id="btn-clear">Clear all meal records</button>
+      <button class="btn sec" id="set-back">Back</button>
+    </div>
   </div>
 </section>
 
@@ -166,6 +465,10 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const r1=n=>Math.round((+n||0)*10)/10;
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const ini=n=>String(n).trim().split(/\s+/).map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
+const PHOTO_DIR='assets/';   // put photos here named by student ID, e.g. assets/S001.jpg
+const photo=s=>`<img src="${PHOTO_DIR}${encodeURIComponent(s.id)}.jpg" alt="" loading="lazy" onerror="this.remove()">`;
+const ico=n=>`<svg class="ic"><use href="#i-${n}"/></svg>`;
 const store={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){alert('Browser storage is full or blocked.');return false}}
@@ -174,27 +477,50 @@ const store={
 /* ---------- Prebuilt roster (edit freely) ---------- */
 // gender: M = boys, F = girls
 const ROSTER=[
- {id:'S001',name:'Aarav Kumar',cls:'8',sec:'A',house:'Aravali',g:'M'},
- {id:'S002',name:'Rohit Yadav',cls:'8',sec:'A',house:'Nilgiri',g:'M'},
- {id:'S003',name:'Mohit Singh',cls:'8',sec:'B',house:'Aravali',g:'M'},
- {id:'S004',name:'Karan Mehta',cls:'8',sec:'B',house:'Shivalik',g:'M'},
- {id:'S005',name:'Priya Sharma',cls:'8',sec:'A',house:'Udaygiri',g:'F'},
- {id:'S006',name:'Neha Patel',cls:'8',sec:'B',house:'Nilgiri',g:'F'},
- {id:'S007',name:'Sneha Das',cls:'8',sec:'A',house:'Udaygiri',g:'F'},
- {id:'S008',name:'Arjun Nayak',cls:'9',sec:'A',house:'Shivalik',g:'M'},
- {id:'S009',name:'Vikram Sahu',cls:'9',sec:'A',house:'Aravali',g:'M'},
- {id:'S010',name:'Suresh Behera',cls:'9',sec:'B',house:'Shivalik',g:'M'},
- {id:'S011',name:'Anjali Verma',cls:'9',sec:'A',house:'Nilgiri',g:'F'},
- {id:'S012',name:'Pooja Mishra',cls:'9',sec:'B',house:'Udaygiri',g:'F'},
- {id:'S013',name:'Riya Panda',cls:'9',sec:'B',house:'Nilgiri',g:'F'},
- {id:'S014',name:'Deepak Rout',cls:'10',sec:'A',house:'Udaygiri',g:'M'},
- {id:'S015',name:'Amit Jena',cls:'10',sec:'A',house:'Aravali',g:'M'},
- {id:'S016',name:'Sourav Mohanty',cls:'10',sec:'B',house:'Nilgiri',g:'M'},
- {id:'S017',name:'Kavya Nair',cls:'10',sec:'A',house:'Shivalik',g:'F'},
- {id:'S018',name:'Ananya Roy',cls:'10',sec:'B',house:'Aravali',g:'F'},
- {id:'S019',name:'Ishita Gupta',cls:'10',sec:'B',house:'Udaygiri',g:'F'}
+ {id:'S001',name:'Aditya Chhotaray',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S002',name:'Aditya Ku. Charchi',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S003',name:'Ajay Talab',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S004',name:'Akash Soyam',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S005',name:'Alakananda Behera',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S006',name:'Chumki Mandal',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S007',name:'Diya Naik',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S008',name:'Gobinda Machha',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S009',name:'Gopal Kanteri',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S010',name:'Gupta Kuasi',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S011',name:'Himansu Pujari',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S012',name:'Jambati Khila',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S013',name:'Jaya Saha',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S014',name:'K Sandeep Kumar',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S015',name:'K Sidheswar',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S016',name:'Kabiraj Khemudu',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S017',name:'Kapildev Majundar',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S018',name:'Krishna Biswas',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S019',name:'Kunal Sarkar',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S020',name:'Lipsha Rani Nayak',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S021',name:'Maheswari Pujari',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S022',name:'Mohit Kumar Nayak',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S023',name:'Om Bhuyan',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S024',name:'Pandu Padiami',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S025',name:'Piyus Soren',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S026',name:'Prabhu Prasad Sahu',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S027',name:'Pratyush Ranjan Sahoo',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S028',name:'Rith Priya Majhi',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S029',name:'Rozy Majumdar',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S030',name:'S Udayalaxmi',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S031',name:'Sachin Kumar Muduli',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S032',name:'Sahil Kumar Pujari',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S033',name:'Saishree Mishra',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S034',name:'Sanjana Sadhak',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S035',name:'Shambhunath Dhali',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S036',name:'Simita Sarkar',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S037',name:'Sruti Kirtaniya',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S038',name:'Subhankar Nayak',cls:'10',sec:'B',house:'',g:'M'},
+ {id:'S039',name:'Tanu Shree Mandal',cls:'10',sec:'B',house:'',g:'F'},
+ {id:'S040',name:'Tapaswini Tanti',cls:'10',sec:'B',house:'',g:'F'}
 ];
+const HAS_HOUSE=ROSTER.some(s=>s.house);
 const MEALS=['Breakfast','Lunch','Snacks','Dinner'];
+const MICON={Breakfast:'sunrise',Lunch:'sun',Snacks:'cup',Dinner:'moon'};
 let records=store.get('records2',[]);
 let keys=store.get('keys2',{g:'',q:''});
 
@@ -204,7 +530,14 @@ let qr=null;
 function go(v){
   stopQR(); stopPlate();
   VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hide',x!==v));
+  if(v==='home') renderHero();
   window.scrollTo(0,0);
+}
+function renderHero(){
+  const d=new Date(), t=ymd(d), rs=records.filter(r=>r.date===t);
+  $('#today').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+' \u00b7 '+autoMeal();
+  $('#st-meals').textContent=rs.length;
+  $('#st-stud').textContent=new Set(rs.map(r=>r.sid)).size;
 }
 function loadScript(urls){
   return new Promise((res,rej)=>{
@@ -279,18 +612,18 @@ function renderPick(){
   if(pk.cls) c.push('Class '+pk.cls);
   if(pk.g) c.push(pk.g==='M'?'Boys':'Girls');
   if(pk.house) c.push(pk.house);
-  $('#pk-crumb').textContent=c.length?c.join('  >  '):'Step 1: choose class';
+  $('#pk-crumb').innerHTML=c.length?c.map(x=>`<span>${esc(x)}</span>`).join('<i>&rsaquo;</i>'):'<span>Step 1: choose class</span>';
   let h='';
   if(!pk.cls){
-    [...new Set(ROSTER.map(s=>s.cls))].sort((a,b)=>a-b).forEach(x=>h+=`<button class="opt" data-k="cls" data-v="${esc(x)}">Class ${esc(x)}</button>`);
+    [...new Set(ROSTER.map(s=>s.cls))].sort((a,b)=>a-b).forEach(x=>h+=`<button class="opt" data-k="cls" data-v="${esc(x)}"><span>Class ${esc(x)}</span></button>`);
   }else if(!pk.g){
-    h+='<button class="opt" data-k="g" data-v="M">Boys</button><button class="opt" data-k="g" data-v="F">Girls</button>';
-  }else if(!pk.house){
-    [...new Set(ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g).map(s=>s.house))].sort().forEach(x=>h+=`<button class="opt" data-k="house" data-v="${esc(x)}">${esc(x)} House</button>`);
-    if(!h) h='<p>No students here.</p>';
+    h+='<button class="opt" data-k="g" data-v="M"><span>Boys</span></button><button class="opt" data-k="g" data-v="F"><span>Girls</span></button>';
+  }else if(HAS_HOUSE&&!pk.house){
+    [...new Set(ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g).map(s=>s.house))].sort().forEach(x=>h+=`<button class="opt" data-k="house" data-v="${esc(x)}"><span>${esc(x)} House</span></button>`);
+    if(!h) h='<p class="empty">No students here.</p>';
   }else{
-    ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g&&s.house===pk.house).sort((a,b)=>a.name.localeCompare(b.name))
-      .forEach(s=>h+=`<button class="opt" data-sid="${esc(s.id)}">${esc(s.name)}<small>Sec ${esc(s.sec)}</small></button>`);
+    ROSTER.filter(s=>s.cls===pk.cls&&s.g===pk.g&&(!HAS_HOUSE||s.house===pk.house)).sort((a,b)=>a.id.localeCompare(b.id))
+      .forEach(s=>h+=`<button class="opt" data-sid="${esc(s.id)}"><i class="av sm">${esc(ini(s.name))}${photo(s)}</i><span>${esc(s.name)}</span><small>Sec ${esc(s.sec)}</small></button>`);
   }
   b.innerHTML=h;
   b.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{ pk[x.dataset.k]=x.dataset.v; renderPick(); });
@@ -309,14 +642,14 @@ function autoMeal(){
 }
 function openStudent(s){
   cur=s; selMeal=autoMeal(); resetMeal(); $('#cam-msg').innerHTML='';
-  $('#who').innerHTML=`<b>${esc(s.name)}</b><div>Class ${esc(s.cls)}${s.sec?' - '+esc(s.sec):''}${s.house?' | '+esc(s.house)+' House':''}</div><div>ID ${esc(s.id)}</div>`;
+  $('#who').innerHTML=`<div class="av lg">${esc(ini(s.name))}${photo(s)}</div><div class="wi"><b>${esc(s.name)}</b><div class="tags"><span class="tag">Class ${esc(s.cls)}${s.sec?' - '+esc(s.sec):''}</span>${s.house?`<span class="tag">${esc(s.house)} House</span>`:''}<span class="tag id">ID ${esc(s.id)}</span></div></div>`;
   renderMeals(); renderProgress();
   go('student');
 }
 function doneToday(m){ const d=ymd(new Date()); return records.some(r=>r.sid===cur.id&&r.date===d&&r.meal===m); }
 function renderMeals(){
   const box=$('#meals');
-  box.innerHTML=MEALS.map(m=>`<button data-m="${m}" class="${m===selMeal?'on':''} ${doneToday(m)?'done':''}">${m}</button>`).join('');
+  box.innerHTML=MEALS.map(m=>`<button data-m="${m}" class="${m===selMeal?'on':''} ${doneToday(m)?'done':''}">${ico(MICON[m])}<span>${m}</span></button>`).join('');
   box.querySelectorAll('button').forEach(b=>b.onclick=()=>{ selMeal=b.dataset.m; renderMeals(); });
 }
 function resetMeal(){
@@ -342,14 +675,17 @@ function renderProgress(){
   const avgK=nd?Math.round(wk.reduce((a,r)=>a+r.kcal,0)/nd):0;
   const missed=Math.max(0,expected-taken);
   const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  let h=`<h2>Progress (last 7 days)</h2>
-    <div><span class="pill ${cls}">${lab}</span> <b style="margin-left:6px">${pct}%</b> of meals taken</div>
-    <div class="bar"><i style="width:${pct}%"></i></div>
-    <small class="m">${taken} meals taken${missed?', '+missed+' missed':''}${nd?' | avg '+avgK+' kcal/day':''}</small>
-    <div class="tw" style="margin-top:10px"><table class="pg"><tr><th></th>${days.map(d=>`<th>${dn[d.getDay()]}</th>`).join('')}</tr>`;
-  MEALS.forEach(m=>{ h+=`<tr><td>${m}</td>${days.map(d=>`<td class="${has(d,m)?'yes':'no'}">${has(d,m)?'&#10003;':'-'}</td>`).join('')}</tr>`; });
-  h+='</table></div>';
-  $('#progress').innerHTML=h;
+  const rows=MEALS.map(m=>`<tr><td>${m}</td>${days.map(d=>{const y=has(d,m);return `<td><span class="ck ${y?'on':''}">${y?'&#10003;':''}</span></td>`}).join('')}</tr>`).join('');
+  $('#progress').innerHTML=`<h2>Progress &middot; last 7 days</h2>
+    <div class="prog-top">
+      <div class="ring r-${cls}" style="--p:${pct}"><b>${pct}%</b></div>
+      <div class="prog-info">
+        <span class="pill ${cls}">${lab}</span>
+        <div class="of">of expected meals taken</div>
+        <div class="mini"><span>${taken} taken</span>${missed?`<span>${missed} missed</span>`:''}${nd?`<span>${avgK} kcal/day</span>`:''}</div>
+      </div>
+    </div>
+    <div class="tw"><table class="pg"><tr><th></th>${days.map((d,i)=>`<th class="${i===6?'tdy':''}">${dn[d.getDay()]}</th>`).join('')}</tr>${rows}</table></div>`;
 }
 
 /* ---------- Meal photo + AI ---------- */
@@ -446,17 +782,21 @@ async function analyze(){
   if(keys.q) steps.push({name:'Groq',run:()=>callGroq(keys.q)});
   const errs=[]; let data=null, used='';
   for(const st of steps){
-    $('#status').innerHTML='<div class="msg info">Analyzing with '+esc(st.name)+'...'+(errs.length?' (previous failed, trying next)':'')+'</div>';
+    $('#status').innerHTML='<div class="msg info"><span class="spin"></span>Analyzing with '+esc(st.name)+'...'+(errs.length?' (previous failed, trying next)':'')+'</div>';
     try{ data=await st.run(); used=st.name; break; }catch(e){ errs.push(st.name+': '+(e.message||e)); }
   }
   if(!data){ $('#status').innerHTML='<div class="msg err">All providers failed:<br>'+errs.map(esc).join('<br>')+'</div>'; return; }
   curItems=(data.items||[]).map(i=>({name:String(i.name||'item'),g:Math.round(+i.grams||0),kcal:+i.kcal||0,p:+i.protein_g||0,c:+i.carbs_g||0,f:+i.fat_g||0}));
   const T={g:0,kcal:0,p:0,c:0,f:0};
-  let h='<div class="tw"><table><tr><th>Item</th><th>g</th><th>kcal</th><th>Prot</th><th>Carb</th><th>Fat</th></tr>';
-  curItems.forEach(i=>{ T.g+=i.g;T.kcal+=i.kcal;T.p+=i.p;T.c+=i.c;T.f+=i.f;
-    h+=`<tr><td>${esc(i.name)}</td><td>${i.g}</td><td>${Math.round(i.kcal)}</td><td>${r1(i.p)}</td><td>${r1(i.c)}</td><td>${r1(i.f)}</td></tr>`; });
-  h+=`<tr class="tot"><td>Total</td><td>${T.g}</td><td>${Math.round(T.kcal)}</td><td>${r1(T.p)}</td><td>${r1(T.c)}</td><td>${r1(T.f)}</td></tr></table></div>`;
-  if(!curItems.length) h='<div class="msg info">No food detected.</div>';
+  curItems.forEach(i=>{ T.g+=i.g;T.kcal+=i.kcal;T.p+=i.p;T.c+=i.c;T.f+=i.f; });
+  let h='';
+  if(curItems.length){
+    h+=`<div class="stats"><div class="stat"><b>${Math.round(T.kcal)}</b><span>kcal</span></div><div class="stat"><b>${r1(T.p)}g</b><span>Protein</span></div><div class="stat"><b>${r1(T.c)}g</b><span>Carbs</span></div><div class="stat"><b>${r1(T.f)}g</b><span>Fat</span></div></div>`;
+    h+='<div class="tw"><table><tr><th>Item</th><th>g</th><th>kcal</th><th>Prot</th><th>Carb</th><th>Fat</th></tr>';
+    curItems.forEach(i=>{
+      h+=`<tr><td>${esc(i.name)}</td><td>${i.g}</td><td>${Math.round(i.kcal)}</td><td>${r1(i.p)}</td><td>${r1(i.c)}</td><td>${r1(i.f)}</td></tr>`; });
+    h+=`<tr class="tot"><td>Total</td><td>${T.g}</td><td>${Math.round(T.kcal)}</td><td>${r1(T.p)}</td><td>${r1(T.c)}</td><td>${r1(T.f)}</td></tr></table></div>`;
+  }else h='<div class="msg info">No food detected.</div>';
   h+=`<small class="m">Confidence: ${esc(data.confidence||'n/a')}. ${esc(data.note||'')} Estimates only. Answered by ${esc(used)}.</small>`;
   curTotals=T;
   $('#status').innerHTML=''; $('#result').innerHTML=h;
@@ -483,7 +823,7 @@ async function renderQRs(){
   try{ await needGen(); }catch(e){ box.innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; return; }
   box.innerHTML=ROSTER.map(s=>{
     const q=qrcode(0,'M'); q.addData(`JNV|${s.id}|${s.name}|${s.cls}|${s.sec}|${s.house}`); q.make();
-    return `<div class="qrc">${q.createImgTag(4,4)}<br><b>${esc(s.name)}</b><br>Class ${esc(s.cls)}-${esc(s.sec)} | ${esc(s.house)}</div>`;
+    return `<div class="qrc">${q.createImgTag(4,4)}<br><b>${esc(s.name)}</b><br>Class ${esc(s.cls)}-${esc(s.sec)}${s.house?' | '+esc(s.house):''}</div>`;
   }).join('');
 }
 
