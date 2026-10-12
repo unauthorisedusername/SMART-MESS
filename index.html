@@ -7,8 +7,8 @@
 <meta name="theme-color" content="#10a06a">
 <meta name="description" content="Track student mess meals with QR scan and AI plate analysis.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mess Tracker">
@@ -429,21 +429,7 @@ tr:last-child td{border-bottom:0}
       <button class="tile" id="btn-list"><svg class="ic"><use href="#i-users"/></svg><span><b>Class list</b><small>Search and pick a student</small></span></button>
     </div>
 
-    <!-- Photo cards -->
-    <div class="lower">
-      <div class="card slides" id="show-food">
-        <div class="stage"><div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Loading photos...</span></div></div>
-        <span class="slide-tag">Food of India</span>
-        <div class="slide-foot"><span class="credit"></span><div class="dots"></div></div>
-      </div>
-      <div class="card slides kids" id="show-kids">
-        <div class="stage"><div class="ph"><svg class="ic"><use href="#i-users"/></svg><span>Loading photos...</span></div></div>
-        <span class="slide-tag">Children who go hungry</span>
-        <div class="slide-foot"><span class="credit"></span><div class="dots"></div></div>
-      </div>
-    </div>
-
-    <!-- Quote cards -->
+    <!-- Row 1: why eat + food photos -->
     <div class="lower">
       <div class="card quote">
         <span class="eyebrow">Why we should eat</span>
@@ -453,6 +439,20 @@ tr:last-child td{border-bottom:0}
           <div class="fact"><b>Energy</b><span>for classes, sports and growing bodies</span></div>
           <div class="fact"><b>Focus</b><span>a fed mind learns and remembers more</span></div>
         </div>
+      </div>
+      <div class="card slides" id="show-food">
+        <div class="stage"><div class="ph"><svg class="ic"><use href="#i-plate"/></svg><span>Loading photos...</span></div></div>
+        <span class="slide-tag">Food of India</span>
+        <div class="slide-foot"><span class="credit"></span><div class="dots"></div></div>
+      </div>
+    </div>
+
+    <!-- Row 2: hungry children photos + why not waste -->
+    <div class="lower">
+      <div class="card slides kids" id="show-kids">
+        <div class="stage"><div class="ph"><svg class="ic"><use href="#i-users"/></svg><span>Loading photos...</span></div></div>
+        <span class="slide-tag">Children who go hungry</span>
+        <div class="slide-foot"><span class="credit"></span><div class="dots"></div></div>
       </div>
       <div class="card quote alt">
         <span class="eyebrow">Why we should not waste</span>
