@@ -40,7 +40,7 @@
   .bg i{opacity:.34!important}
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;zoom:.67}
 body{
   margin:0;min-height:100vh;min-height:100dvh;
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -80,7 +80,7 @@ body{
 /* ---------- Header ---------- */
 header{
   position:sticky;top:10px;z-index:30;
-  width:calc(100% - 24px);max-width:1120px;margin:10px auto 0;
+  width:calc(100% - 24px);max-width:1670px;margin:10px auto 0;
   display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:10px 12px 10px 14px;border-radius:22px;
 }
@@ -96,7 +96,7 @@ header button{
 }
 header button:active{transform:scale(.97)}
 
-main{width:calc(100% - 24px);max-width:1120px;margin:0 auto;padding:16px 0 56px}
+main{width:calc(100% - 24px);max-width:1670px;margin:0 auto;padding:16px 0 56px}
 section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
 @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
@@ -138,6 +138,14 @@ section:not(.hide){animation:in .38s cubic-bezier(.2,.8,.2,1) both}
 .chip{flex:1;background:var(--glass2);border:1px solid var(--edge);border-radius:18px;padding:12px 16px;box-shadow:inset 0 1px 0 var(--hi)}
 .chip b{display:block;font-size:28px;letter-spacing:-.03em;line-height:1.1}
 .chip span{font-size:12px;color:var(--m);font-weight:600}
+.card.quote{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(27,189,130,.22),rgba(255,255,255,.3) 55%,rgba(251,191,36,.18))}
+.card.quote::before{content:"\201C";position:absolute;right:18px;top:-18px;font-size:150px;font-family:Georgia,serif;line-height:1;color:var(--g);opacity:.18;pointer-events:none}
+.card.quote blockquote{margin:10px 0 12px;font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1.4;font-style:italic;letter-spacing:-.01em}
+.card.quote p{margin:0 0 16px;color:var(--m);font-size:15px;line-height:1.55}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fact{background:var(--glass2);border:1px solid var(--edge);border-radius:18px;padding:12px 14px;box-shadow:inset 0 1px 0 var(--hi)}
+.fact b{display:block;font-size:22px;letter-spacing:-.03em;color:var(--gd)}
+.fact span{font-size:12px;line-height:1.35;color:var(--m);font-weight:600;display:block;margin-top:2px}
 .linkwrap{text-align:center;margin:18px 0 0}
 .linkpill{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:99px;
   background:var(--glass2);border:1px solid var(--edge);color:var(--gd);font-size:14px;font-weight:650;text-decoration:none;box-shadow:inset 0 1px 0 var(--hi)}
@@ -179,7 +187,7 @@ small.m{color:var(--m);font-size:12.5px;line-height:1.5;display:block;margin-top
 .av.sm{width:40px;height:40px;font-size:14px}
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .av.lg{width:76px;height:76px;font-size:26px}
-@media (min-width:768px){.av.lg{width:96px;height:96px;font-size:32px}}
+@media (min-width:515px){.av.lg{width:96px;height:96px;font-size:32px}}
 
 /* ---------- Scan ---------- */
 #qr-reader{width:100%;border-radius:22px;overflow:hidden;background:#0b1511;border:1px solid var(--edge)}
@@ -212,6 +220,11 @@ small.m{color:var(--m);font-size:12.5px;line-height:1.5;display:block;margin-top
 .meals button.done::after{content:"\2713";position:absolute;top:8px;right:8px;width:21px;height:21px;border-radius:50%;
   background:var(--g);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;box-shadow:0 3px 8px rgba(16,160,106,.4)}
 
+#btn-snap{min-height:68px;font-size:18px;background:linear-gradient(135deg,#3be8a8,#0f9d68);animation:snapglow 1.3s ease-in-out infinite}
+@keyframes snapglow{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(59,232,168,.7),0 0 20px 4px rgba(59,232,168,.6),inset 0 1px 0 rgba(255,255,255,.5)}
+  50%{transform:scale(1.03);box-shadow:0 0 0 16px rgba(59,232,168,0),0 0 38px 12px rgba(59,232,168,.95),inset 0 1px 0 rgba(255,255,255,.5)}
+}
 #cam-box{margin:14px 0 4px}
 #cam-box .acts{margin-top:12px}
 #plate-video{width:100%;max-height:60vh;object-fit:cover;border-radius:22px;background:#000;display:block;border:1px solid var(--edge)}
@@ -268,14 +281,14 @@ tr:last-child td{border-bottom:0}
 .qrc img{max-width:100%;height:auto}
 
 /* ---------- Tablet ---------- */
-@media (min-width:640px){
+@media (min-width:430px){
   .acts{grid-template-columns:1fr 1fr}
   .meals{grid-template-columns:repeat(4,1fr)}
   .card.hero{flex-direction:row;justify-content:space-between;align-items:center}
   .chips{min-width:320px}
   .qrs{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
 }
-@media (min-width:768px){
+@media (min-width:515px){
   header{padding:12px 14px 12px 18px}
   header h1{font-size:21px}
   main{padding-top:20px}
@@ -290,11 +303,11 @@ tr:last-child td{border-bottom:0}
   .card.who{padding:22px 26px}
   .who b{font-size:26px}
 }
-@media (min-width:900px){
+@media (min-width:600px){
   .split{grid-template-columns:1.08fr .92fr}
   #progress{position:sticky;top:92px}
 }
-@media (min-width:1100px){
+@media (min-width:740px){
   main{width:calc(100% - 48px)}
   header{width:calc(100% - 48px)}
 }
@@ -302,6 +315,7 @@ tr:last-child td{border-bottom:0}
 @media (prefers-reduced-motion:reduce){
   .bg i{animation:none}
   section:not(.hide){animation:none}
+  #btn-snap{animation:none;box-shadow:0 0 30px 8px rgba(59,232,168,.85)}
 }
 @media print{
   header,.noprint,.bg{display:none!important}
@@ -358,13 +372,15 @@ tr:last-child td{border-bottom:0}
       <button class="btn big" id="btn-next"><svg class="ic"><use href="#i-scan"/></svg><span>Next student<small>Scan QR code</small></span></button>
       <button class="btn big sec" id="btn-list"><svg class="ic"><use href="#i-users"/></svg><span>Choose from class list<small>Boys / Girls &rsaquo; student</small></span></button>
     </div>
-    <div class="card">
-      <h2>Engines</h2>
-      <label class="l">Main engine: Gemini API key</label>
-      <input id="hk-g" type="password" placeholder="AIza..." autocomplete="off">
-      <label class="l">Backup engine: Groq API key (optional)</label>
-      <input id="hk-q" type="password" placeholder="gsk_..." autocomplete="off">
-      <small class="m">Saved automatically. If Gemini fails, it tries other Gemini models, then Groq.</small>
+    <div class="card quote">
+      <span class="eyebrow">Respect your plate</span>
+      <blockquote>Food is more than a meal. It is a farmer's months of work, a family's hope, and the energy behind every child's dream.</blockquote>
+      <p>When we finish what we take, we honour all of that. Taking only what we can eat is a small act of gratitude that we can repeat three times a day.</p>
+      <div class="facts">
+        <div class="fact"><b>733 million</b><span>people faced hunger in 2023, about 1 in 11 worldwide</span></div>
+        <div class="fact"><b>1.05 billion</b><span>tonnes of food were wasted in 2022</span></div>
+      </div>
+      <small class="m">Sources: UN FAO State of Food Security and Nutrition 2024; UNEP Food Waste Index Report 2024. Millions of children are among those who go to bed hungry every day.</small>
     </div>
   </div>
   <p class="linkwrap"><a href="#" id="lnk-qrs" class="linkpill"><svg class="ic"><use href="#i-scan"/></svg>Student QR codes (for testing / printing)</a></p>
@@ -835,13 +851,14 @@ $('#set-save').onclick=()=>{
   setTimeout(()=>$('#set-msg').innerHTML='',2000);
 };
 $('#btn-clear').onclick=()=>{ if(confirm('Delete all meal records?')){ records=[]; store.set('records2',records); } };
-$('#btn-demo').onclick=()=>{
-  const rnd=Math.random;
+function seedDemo(){
+  const rnd=Math.random, nowIdx=MEALS.indexOf(autoMeal());
   ROSTER.forEach((s,idx)=>{
-    const rate=[0.95,0.8,0.55,0.3][idx%4];
-    for(let i=1;i<=6;i++){
+    const rate=[0.95,0.8,0.55,0.3,0.9][idx%5];
+    for(let i=0;i<=6;i++){
       const d=new Date(); d.setDate(d.getDate()-i); const date=ymd(d);
-      MEALS.forEach(m=>{
+      MEALS.forEach((m,mi)=>{
+        if(i===0&&mi>=nowIdx) return;   // today: only meals already passed
         if(rnd()>rate) return;
         const base={Breakfast:380,Lunch:800,Snacks:250,Dinner:760}[m]*(0.85+rnd()*0.25);
         records=records.filter(r=>!(r.sid===s.id&&r.date===date&&r.meal===m));
@@ -850,13 +867,11 @@ $('#btn-demo').onclick=()=>{
     }
   });
   store.set('records2',records);
-  $('#set-msg').innerHTML='<div class="msg good">Demo history loaded.</div>';
-};
+}
+$('#btn-demo').onclick=()=>{ seedDemo(); $('#set-msg').innerHTML='<div class="msg good">Demo history loaded.</div>'; };
+if(!store.get('seeded',false)&&!records.length){ seedDemo(); store.set('seeded',true); }
 
-function syncKeys(){ $('#hk-g').value=keys.g; $('#hk-q').value=keys.q; $('#set-g').value=keys.g; $('#set-q').value=keys.q; }
-['hk-g','hk-q'].forEach(id=>$('#'+id).oninput=()=>{
-  keys={g:$('#hk-g').value.trim(),q:$('#hk-q').value.trim()}; store.set('keys2',keys);
-});
+function syncKeys(){ $('#set-g').value=keys.g; $('#set-q').value=keys.q; }
 const _save=$('#set-save').onclick;
 $('#set-save').onclick=()=>{ _save(); syncKeys(); };
 const _setBtn=$('#btn-set').onclick;
